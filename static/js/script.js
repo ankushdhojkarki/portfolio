@@ -218,14 +218,13 @@ function initParallax() {
         const handleParallax = throttle(function() {
             const scrollPosition = window.pageYOffset;
             const heroTop = heroSection.offsetTop;
-            const heroHeight = heroSection.offsetHeight;
             
-            // Calculate parallax movement
+            // Calculate parallax movement - negative value to move image UP as you scroll down
             const offset = scrollPosition - heroTop;
-            const moveDistance = offset * 0.35; // Stronger parallax effect
+            const moveDistance = offset * -0.35; // Negative for upward movement
             
             // Only apply transform when in view or shortly after
-            if (offset < heroHeight + 300) {
+            if (offset > -300 && offset < 600) {
                 heroImage.style.transform = `translateY(${moveDistance}px)`;
             }
         }, 16); // ~60fps throttling
@@ -309,7 +308,7 @@ function throttle(func, limit) {
 // ============================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Ankush Portfolio Loaded Successfully');
+    console.log('Vaibhav Portfolio Loaded Successfully');
 
     // Initialize all features
     initDarkMode();
