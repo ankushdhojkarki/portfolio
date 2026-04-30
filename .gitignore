@@ -229,3 +229,6 @@ media/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Ignore image files
+static/images/
