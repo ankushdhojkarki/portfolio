@@ -124,10 +124,7 @@
   }
 }
 
-/* ==========================================================================
-   GLOBAL STYLES
-   ========================================================================== */
-
+/* GLOBAL STYLES */
 * {
     margin: 0;
     padding: 0;
@@ -138,6 +135,13 @@ html {
     scroll-behavior: smooth;
 }
 
+/* Parallax effect for hero image */
+.hero-image {
+    will-change: transform;
+    transform: translateY(0px);
+    transition: transform 0.1s ease-out;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
     background-color: #ffffff;
@@ -146,7 +150,6 @@ body {
     letter-spacing: 0.3px;
 }
 
-/* Color Variables */
 :root {
     --primary-gold: #d4a574;
     --dark-bg: #1a1a1a;
@@ -158,10 +161,7 @@ body {
     --accent-gold: #d4a574;
 }
 
-/* ==========================================================================
-   NAVIGATION
-   ========================================================================== */
-
+/* NAVIGATION */
 .navbar {
     position: fixed;
     top: 0;
@@ -209,10 +209,7 @@ body {
     color: var(--accent-gold);
 }
 
-/* ==========================================================================
-   HERO SECTION
-   ========================================================================== */
-
+/* HERO SECTION */
 .hero {
     margin-top: 80px;
     padding: 6rem 2rem 4rem;
@@ -293,10 +290,7 @@ body {
     font-size: 0.95rem;
 }
 
-/* ==========================================================================
-   CTA SECTION
-   ========================================================================== */
-
+/* CTA SECTION */
 .cta-section {
     padding: 6rem 2rem;
     background-color: var(--gray-light);
@@ -326,10 +320,7 @@ body {
     flex-wrap: wrap;
 }
 
-/* ==========================================================================
-   BUTTONS
-   ========================================================================== */
-
+/* BUTTONS */
 .btn {
     padding: 0.75rem 1.5rem;
     border: none;
@@ -405,10 +396,7 @@ body {
     background-color: #c49060;
 }
 
-/* ==========================================================================
-   PROJECTS SECTION
-   ========================================================================== */
-
+/* PROJECTS SECTION */
 .projects {
     padding: 6rem 2rem;
     background-color: var(--light-bg);
@@ -508,10 +496,7 @@ body {
     justify-content: center;
 }
 
-/* ==========================================================================
-   SKILLS SECTION
-   ========================================================================== */
-
+/* SKILLS SECTION */
 .skills {
     padding: 6rem 2rem;
     background-color: var(--gray-light);
@@ -577,10 +562,7 @@ body {
     line-height: 1.4;
 }
 
-/* ==========================================================================
-   BLOG SECTION
-   ========================================================================== */
-
+/* BLOG SECTION */
 .blog {
     padding: 6rem 2rem;
     background-color: white;
@@ -644,10 +626,7 @@ body {
     object-fit: contain;
 }
 
-/* ==========================================================================
-   ACHIEVEMENTS SECTION
-   ========================================================================== */
-
+/* ACHIEVEMENTS SECTION */
 .achievements {
     padding: 6rem 2rem;
     background-color: var(--gray-light);
@@ -726,10 +705,7 @@ body {
     margin: 0;
 }
 
-/* ==========================================================================
-   MEMORIES SECTION
-   ========================================================================== */
-
+/* MEMORIES SECTION */
 .memories {
     padding: 6rem 2rem;
     background-color: white;
@@ -770,10 +746,7 @@ body {
     transform: scale(1.02);
 }
 
-/* ==========================================================================
-   CONTACT SECTION
-   ========================================================================== */
-
+/* CONTACT SECTION */
 .contact {
     padding: 6rem 2rem;
     background-color: var(--gray-light);
@@ -872,10 +845,7 @@ body {
     pointer-events: none;
 }
 
-/* ==========================================================================
-   FOOTER
-   ========================================================================== */
-
+/* FOOTER */
 .footer {
     padding: 3rem 2rem;
     background-color: var(--light-bg);
@@ -909,10 +879,7 @@ body {
     color: var(--accent-gold);
 }
 
-/* ==========================================================================
-   RESPONSIVE DESIGN
-   ========================================================================== */
-
+/* RESPONSIVE DESIGN */
 @media (max-width: 768px) {
     .navbar-container {
         padding: 0 1rem;
@@ -926,7 +893,7 @@ body {
     .hero-container {
         grid-template-columns: 1fr;
         gap: 2rem;
-        padding: 3rem 0;
+        padding: 2rem;
     }
 
     .hero-title {
@@ -1038,10 +1005,6 @@ body {
     }
 }
 
-/* ==========================================================================
-   ANIMATIONS
-   ========================================================================== */
-
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -1057,8 +1020,4 @@ body {
 .skill-card,
 .achievement-card {
     animation: fadeInUp 0.6s ease-out;
-}
-
-section {
-    position: relative;
 }

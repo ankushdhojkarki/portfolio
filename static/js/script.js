@@ -207,24 +207,33 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ============================================================================
-// PARALLAX EFFECT (Optional - can be enabled for hero section)
+// PARALLAX EFFECT - Hero image moves upward as user scrolls
 // ============================================================================
 
 function initParallax() {
     const heroImage = document.querySelector('.hero-image');
-    if (heroImage) {
-        window.addEventListener('scroll', function() {
+    const heroSection = document.querySelector('.hero');
+    
+    if (heroImage && heroSection) {
+        const handleParallax = throttle(function() {
             const scrollPosition = window.pageYOffset;
-            const heroSection = document.querySelector('.hero');
-            const elementPosition = heroSection.offsetTop;
-            const elementHeight = heroSection.clientHeight;
-
-            if (scrollPosition >= elementPosition - window.innerHeight &&
-                scrollPosition <= elementPosition + elementHeight) {
-                const distance = scrollPosition - elementPosition;
-                heroImage.style.transform = `translateY(${distance * 0.3}px)`;
+            const heroTop = heroSection.offsetTop;
+            const heroHeight = heroSection.offsetHeight;
+            
+            // Calculate parallax movement
+            const offset = scrollPosition - heroTop;
+            const moveDistance = offset * 0.35; // Stronger parallax effect
+            
+            // Only apply transform when in view or shortly after
+            if (offset < heroHeight + 300) {
+                heroImage.style.transform = `translateY(${moveDistance}px)`;
             }
-        });
+        }, 16); // ~60fps throttling
+        
+        window.addEventListener('scroll', handleParallax, { passive: true });
+        
+        // Initial call
+        handleParallax();
     }
 }
 
@@ -300,7 +309,7 @@ function throttle(func, limit) {
 // ============================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Vaibhav Portfolio Loaded Successfully');
+    console.log('Ankush Portfolio Loaded Successfully');
 
     // Initialize all features
     initDarkMode();
