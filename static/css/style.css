@@ -234,12 +234,16 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
-    align-items: flex-start;
+    align-items: stretch; /* Changed from flex-start to allow vertical centering */
     min-height: 600px;
 }
 
 .hero-content {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%; 
 }
 
 .accent-line {
