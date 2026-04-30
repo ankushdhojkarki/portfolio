@@ -207,24 +207,32 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ============================================================================
-// PARALLAX EFFECT (Optional - can be enabled for hero section)
+// PARALLAX EFFECT - Hero image moves upward as user scrolls
 // ============================================================================
 
 function initParallax() {
     const heroImage = document.querySelector('.hero-image');
-    if (heroImage) {
-        window.addEventListener('scroll', function() {
+    const heroSection = document.querySelector('.hero');
+    
+    if (heroImage && heroSection) {
+        const handleParallax = throttle(function() {
             const scrollPosition = window.pageYOffset;
-            const heroSection = document.querySelector('.hero');
-            const elementPosition = heroSection.offsetTop;
-            const elementHeight = heroSection.clientHeight;
-
-            if (scrollPosition >= elementPosition - window.innerHeight &&
-                scrollPosition <= elementPosition + elementHeight) {
-                const distance = scrollPosition - elementPosition;
-                heroImage.style.transform = `translateY(${distance * 0.3}px)`;
+            const heroTop = heroSection.offsetTop;
+            
+            // Calculate parallax movement - negative value to move image UP as you scroll down
+            const offset = scrollPosition - heroTop;
+            const moveDistance = offset * -0.35; // Negative for upward movement
+            
+            // Only apply transform when in view or shortly after
+            if (offset > -300 && offset < 600) {
+                heroImage.style.transform = `translateY(${moveDistance}px)`;
             }
-        });
+        }, 16); // ~60fps throttling
+        
+        window.addEventListener('scroll', handleParallax, { passive: true });
+        
+        // Initial call
+        handleParallax();
     }
 }
 
