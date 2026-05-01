@@ -15,26 +15,36 @@ document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelectorAll('.nav-link');
 
     function updateActiveLink() {
-        let current = '';
+        const scrollPos = window.pageYOffset + window.innerHeight / 3;
+        let current = sections[0]?.getAttribute('id') || '';
 
         sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            if (window.pageYOffset >= sectionTop - 150) {
+            if (scrollPos >= section.offsetTop) {
                 current = section.getAttribute('id');
             }
         });
 
         navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${current}`) {
-                link.classList.add('active');
-            }
+            link.classList.toggle(
+                'active',
+                link.getAttribute('href') === `#${current}`
+            );
         });
     }
 
-    window.addEventListener('scroll', updateActiveLink);
+    window.addEventListener('scroll', updateActiveLink, { passive: true });
+
+    // Update immediately on click so the highlight moves before scroll finishes
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            const href = link.getAttribute('href');
+            navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === href));
+        });
+    });
+
+    updateActiveLink(); // run once on load
 });
+
 
 // ============================================================================
 // INTERSECTION OBSERVER FOR FADE-IN ANIMATIONS
