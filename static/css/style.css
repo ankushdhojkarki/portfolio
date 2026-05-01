@@ -1076,3 +1076,145 @@ body {
 section {
     position: relative;
 }
+
+/* ==========================================================================
+   MINIMALIST PRELOADER
+   ========================================================================== */
+
+.preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Two curtains that split apart on exit */
+.preloader-curtain {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    background-color: #ffffff;
+    transition: transform 0.9s cubic-bezier(0.77, 0, 0.175, 1);
+    z-index: 1;
+}
+
+.preloader-curtain-left  { left: 0; }
+.preloader-curtain-right { right: 0; }
+
+.preloader.is-exiting .preloader-curtain-left  { transform: translateX(-100%); }
+.preloader.is-exiting .preloader-curtain-right { transform: translateX(100%); }
+
+.preloader.is-hidden { display: none; }
+
+/* Center content sits above curtains */
+.preloader-content {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+}
+
+.preloader.is-exiting .preloader-content { opacity: 0; }
+
+/* Letters rise into view, staggered */
+.preloader-letters {
+    display: flex;
+    gap: 0.5rem;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.preloader-letters span {
+    display: inline-block;
+    font-size: clamp(2.5rem, 7vw, 4.5rem);
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    color: #1a1a1a;
+    transform: translateY(110%);
+    opacity: 0;
+    animation: preloaderLetterRise 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.preloader-letters span:nth-child(1) { animation-delay: 0.00s; }
+.preloader-letters span:nth-child(2) { animation-delay: 0.08s; }
+.preloader-letters span:nth-child(3) { animation-delay: 0.16s; }
+.preloader-letters span:nth-child(4) { animation-delay: 0.24s; }
+.preloader-letters span:nth-child(5) { animation-delay: 0.32s; }
+.preloader-letters span:nth-child(6) { animation-delay: 0.40s; }
+
+@keyframes preloaderLetterRise {
+    from { transform: translateY(110%); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* Gold progress line */
+.preloader-bar {
+    position: relative;
+    width: clamp(12rem, 25vw, 18rem);
+    height: 2px;
+    background-color: #e0e0e0;
+    overflow: hidden;
+}
+
+.preloader-bar-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0%;
+    background-color: #d4a574;
+    transition: width 0.05s linear;
+}
+
+.preloader-counter {
+    margin-top: 1rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: #666666;
+}
+
+/* Lock body scroll while loading */
+body.is-loading {
+    overflow: hidden;
+}
+
+/* Hero reveal animation triggered after preloader */
+body.is-loading .hero-content > *,
+body.is-loading .hero-image {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+body.is-loaded .hero-content > * {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+body.is-loaded .hero-content > *:nth-child(1) { transition-delay: 0.1s; }
+body.is-loaded .hero-content > *:nth-child(2) { transition-delay: 0.25s; }
+body.is-loaded .hero-content > *:nth-child(3) { transition-delay: 0.4s; }
+
+body.is-loaded .hero-image {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 1s ease-out 0.3s, transform 1s ease-out 0.3s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .preloader-letters span,
+    .preloader-curtain,
+    .preloader-content,
+    body.is-loaded .hero-content > *,
+    body.is-loaded .hero-image {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+    }
+}
