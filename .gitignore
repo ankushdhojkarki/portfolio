@@ -232,6 +232,3 @@ desktop.ini
 
 # Ignore image files
 static/images/
-
-#Ignore doc files
-static/docs/
