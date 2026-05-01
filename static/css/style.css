@@ -786,8 +786,19 @@ body {
     font-size: 2.75rem;
     font-weight: 700;
     color: var(--text-dark);
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
     line-height: 1.1;
+}
+
+.blog-title::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -30px; /* Adjusts how far below the text the line sits */
+    width: 50px;    /* Matches the short length in your reference image */
+    height: 4px;    /* Thickness of the line */
+    background-color: #d4a373; /* That golden/tan color from your screenshot */
+    border-radius: 2px;
 }
 
 .blog-description {
