@@ -339,3 +339,52 @@ if (window.performance && window.performance.timing) {
         }, 0);
     });
 }
+
+// ============================================================================
+// MINIMALIST PRELOADER
+// ============================================================================
+
+(function initPreloader() {
+    document.body.classList.add('is-loading');
+
+    function start() {
+        const preloader = document.getElementById('preloader');
+        const fill = document.getElementById('preloaderBarFill');
+        const counter = document.getElementById('preloaderCounter');
+        if (!preloader || !fill || !counter) {
+            document.body.classList.remove('is-loading');
+            document.body.classList.add('is-loaded');
+            return;
+        }
+
+        const duration = 1900; // ms
+        const start = performance.now();
+
+        function tick(now) {
+            const t = Math.min(1, (now - start) / duration);
+            // ease-out cubic
+            const eased = 1 - Math.pow(1 - t, 3);
+            const pct = Math.round(eased * 100);
+            fill.style.width = pct + '%';
+            counter.textContent = String(pct).padStart(3, '0');
+
+            if (t < 1) {
+                requestAnimationFrame(tick);
+            } else {
+                // Split the curtains, reveal page
+                preloader.classList.add('is-exiting');
+                document.body.classList.remove('is-loading');
+                document.body.classList.add('is-loaded');
+                setTimeout(() => preloader.classList.add('is-hidden'), 950);
+            }
+        }
+
+        requestAnimationFrame(tick);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', start);
+    } else {
+        start();
+    }
+})();
