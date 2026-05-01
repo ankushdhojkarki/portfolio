@@ -388,3 +388,210 @@ if (window.performance && window.performance.timing) {
         start();
     }
 })();
+
+// ============================================================================
+// ✨ COOL MINIMAL EFFECTS LAYER — additive, site-wide
+// ============================================================================
+
+(function fxEffects() {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ---------- 1. Custom cursor ----------
+    function initCursor() {
+        if (reduce) return;
+        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+        const dot = document.createElement('div');
+        const ring = document.createElement('div');
+        dot.className = 'fx-cursor-dot';
+        ring.className = 'fx-cursor-ring';
+        document.body.appendChild(dot);
+        document.body.appendChild(ring);
+
+        let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+        let rx = mx, ry = my;
+
+        document.addEventListener('mousemove', (e) => {
+            mx = e.clientX; my = e.clientY;
+            dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
+        });
+
+        function loop() {
+            rx += (mx - rx) * 0.18;
+            ry += (my - ry) * 0.18;
+            ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+            requestAnimationFrame(loop);
+        }
+        loop();
+
+        const hoverables = 'a, button, input, textarea, .project-card, .skill-card, .achievement-card, .memories-grid img';
+        document.querySelectorAll(hoverables).forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                ring.classList.add('is-hover');
+                dot.classList.add('is-hover');
+            });
+            el.addEventListener('mouseleave', () => {
+                ring.classList.remove('is-hover');
+                dot.classList.remove('is-hover');
+            });
+        });
+
+        document.addEventListener('mouseleave', () => {
+            dot.style.opacity = '0'; ring.style.opacity = '0';
+        });
+        document.addEventListener('mouseenter', () => {
+            dot.style.opacity = ''; ring.style.opacity = '';
+        });
+    }
+
+    // ---------- 2. Scroll progress bar ----------
+    function initScrollProgress() {
+        const bar = document.createElement('div');
+        bar.className = 'fx-scroll-progress';
+        document.body.appendChild(bar);
+        const update = () => {
+            const h = document.documentElement;
+            const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+            bar.style.setProperty('--fx-scroll', pct + '%');
+            bar.style.width = pct + '%';
+        };
+        window.addEventListener('scroll', update, { passive: true });
+        update();
+    }
+
+    // ---------- 3. Navbar shrink on scroll ----------
+    function initNavbarScroll() {
+        const navbar = document.querySelector('.navbar');
+        if (!navbar) return;
+        const onScroll = () => {
+            navbar.classList.toggle('is-scrolled', window.scrollY > 40);
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+    }
+
+    // ---------- 4. Reveal on scroll (sections, cards, headers) ----------
+    function initReveal() {
+        // Mark targets
+        const selectors = [
+            '.section-header', '.section-header-left',
+            '.cta-section', '.cta-buttons',
+            '.hero-content', '.hero-image', '.hero-footer',
+            '.blog-content', '.blog-illustration',
+            '.contact-header', '.contact-form-container',
+            '.memories-title', '.memories-subtitle'
+        ];
+        selectors.forEach(sel => {
+            document.querySelectorAll(sel).forEach(el => el.classList.add('fx-reveal'));
+        });
+
+        // Stagger groups
+        const staggerSelectors = [
+            '.projects-grid', '.skills-grid', '.achievements-grid',
+            '.achievements-timeline', '.memories-grid', '.nav-links'
+        ];
+        staggerSelectors.forEach(sel => {
+            document.querySelectorAll(sel).forEach(el => el.classList.add('fx-stagger'));
+        });
+
+        // Image masks
+        document.querySelectorAll(
+            '.hero-image, .project-image, .achievement-card, .memories-grid img, .blog-illustration'
+        ).forEach(el => {
+            if (el.tagName === 'IMG') {
+                const wrap = document.createElement('span');
+                wrap.className = 'fx-img-mask';
+                wrap.style.display = 'block';
+                el.parentNode.insertBefore(wrap, el);
+                wrap.appendChild(el);
+            } else {
+                el.classList.add('fx-img-mask');
+            }
+        });
+
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+        document.querySelectorAll('.fx-reveal, .fx-stagger, .fx-img-mask').forEach(el => io.observe(el));
+    }
+
+    // ---------- 5. Section titles letter rise ----------
+    function initTitleAnim() {
+        document.querySelectorAll('.section-title, .cta-title, .memories-title, .blog-title')
+            .forEach(el => {
+                if (el.dataset.fxAnimated) return;
+                el.dataset.fxAnimated = '1';
+                const text = el.innerHTML;
+                // Skip if contains nested elements like <br>
+                const hasBr = /<br\s*\/?>/i.test(text);
+                const parts = hasBr ? text.split(/<br\s*\/?>/i) : [text];
+                el.innerHTML = parts.map(part => {
+                    return [...part].map(ch => {
+                        if (ch === ' ') return '<span class="fx-letter fx-space">&nbsp;</span>';
+                        return `<span class="fx-letter">${ch}</span>`;
+                    }).join('');
+                }).join('<br>');
+
+                // Stagger delays per letter
+                el.querySelectorAll('.fx-letter').forEach((s, i) => {
+                    s.style.transitionDelay = (i * 0.025) + 's';
+                });
+                el.classList.add('fx-title-anim', 'fx-reveal');
+            });
+    }
+
+    // ---------- 6. Magnetic buttons ----------
+    function initMagnetic() {
+        if (reduce) return;
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const r = btn.getBoundingClientRect();
+                const x = e.clientX - r.left - r.width / 2;
+                const y = e.clientY - r.top - r.height / 2;
+                btn.style.transform = `translate(${x * 0.15}px, ${y * 0.25}px)`;
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = '';
+            });
+        });
+    }
+
+    // ---------- 7. Card 3D tilt ----------
+    function initTilt() {
+        if (reduce) return;
+        document.querySelectorAll('.project-card, .achievement-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const r = card.getBoundingClientRect();
+                const x = (e.clientX - r.left) / r.width - 0.5;
+                const y = (e.clientY - r.top) / r.height - 0.5;
+                card.style.transform = `perspective(900px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateY(-6px)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
+        });
+    }
+
+    // ---------- Init all ----------
+    function start() {
+        initScrollProgress();
+        initNavbarScroll();
+        initTitleAnim();
+        initReveal();
+        initMagnetic();
+        initTilt();
+        initCursor();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', start);
+    } else {
+        start();
+    }
+})();
