@@ -1534,12 +1534,13 @@ body::before {
 
 /* ---------- 14. CTA title shimmer ---------- */
 .cta-title {
-    background: linear-gradient(90deg, #1a1a1a 0%, #1a1a1a 40%, var(--primary-gold) 50%, #1a1a1a 60%, #1a1a1a 100%);
-    background-size: 200% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: fxShimmer 6s linear infinite;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1.5rem;
+    text-align: center;
 }
 @keyframes fxShimmer {
     0%   { background-position: 200% 0; }
