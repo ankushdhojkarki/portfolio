@@ -56,9 +56,7 @@ const observer = new IntersectionObserver(function(entries) {
 
 // Observe all cards and elements for fade-in animation
 document.addEventListener('DOMContentLoaded', function() {
-    const cards = document.querySelectorAll(
-        '.project-card, .skill-card, .achievement-card, .achievement-milestone'
-    );
+    const cards = document.querySelectorAll('.project-card, .skill-card');
     cards.forEach(card => {
         card.style.opacity = '0';
         observer.observe(card);
@@ -424,7 +422,7 @@ if (window.performance && window.performance.timing) {
         }
         loop();
 
-        const hoverables = 'a, button, input, textarea, .project-card, .skill-card, .achievement-card, .memories-grid img';
+        const hoverables = 'a, button, input, textarea, .project-card, .skill-card, .project-icon-link, .project-tag';
         document.querySelectorAll(hoverables).forEach(el => {
             el.addEventListener('mouseenter', () => {
                 ring.classList.add('is-hover');
@@ -478,8 +476,7 @@ if (window.performance && window.performance.timing) {
             '.cta-section', '.cta-buttons',
             '.hero-content', '.hero-image', '.hero-footer',
             '.blog-content', '.blog-illustration',
-            '.contact-header', '.contact-form-container',
-            '.memories-title', '.memories-subtitle'
+            '.contact-header', '.contact-form-container'
         ];
         selectors.forEach(sel => {
             document.querySelectorAll(sel).forEach(el => el.classList.add('fx-reveal'));
@@ -487,8 +484,7 @@ if (window.performance && window.performance.timing) {
 
         // Stagger groups
         const staggerSelectors = [
-            '.projects-grid', '.skills-grid', '.achievements-grid',
-            '.achievements-timeline', '.memories-grid', '.nav-links'
+            '.projects-grid', '.skills-grid', '.nav-links'
         ];
         staggerSelectors.forEach(sel => {
             document.querySelectorAll(sel).forEach(el => el.classList.add('fx-stagger'));
@@ -496,7 +492,7 @@ if (window.performance && window.performance.timing) {
 
         // Image masks
         document.querySelectorAll(
-            '.hero-image, .project-image, .achievement-card, .memories-grid img, .blog-illustration'
+            '.hero-image, .project-image, .blog-illustration'
         ).forEach(el => {
             if (el.tagName === 'IMG') {
                 const wrap = document.createElement('span');
@@ -522,21 +518,50 @@ if (window.performance && window.performance.timing) {
     }
 
     // ---------- 5. Section titles letter rise ----------
+    // DOM-walking version: preserves nested elements like <span class="highlight-gold">
+    // and <br>, only splits text nodes into per-character spans.
     function initTitleAnim() {
-        document.querySelectorAll('.section-title, .cta-title, .memories-title, .blog-title')
+        function wrapTextNode(node) {
+            const text = node.nodeValue;
+            const frag = document.createDocumentFragment();
+            for (const ch of text) {
+                const span = document.createElement('span');
+                if (ch === ' ') {
+                    span.className = 'fx-letter fx-space';
+                    span.innerHTML = '&nbsp;';
+                } else {
+                    span.className = 'fx-letter';
+                    span.textContent = ch;
+                }
+                frag.appendChild(span);
+            }
+            node.parentNode.replaceChild(frag, node);
+        }
+
+        function walk(node) {
+            // Snapshot children because we'll mutate during iteration
+            const children = Array.from(node.childNodes);
+            for (const child of children) {
+                if (child.nodeType === Node.TEXT_NODE) {
+                    if (child.nodeValue && child.nodeValue.trim() !== '') {
+                        wrapTextNode(child);
+                    }
+                } else if (child.nodeType === Node.ELEMENT_NODE) {
+                    // Recurse into elements like <span class="highlight-gold">
+                    // but skip <br> (leave intact)
+                    if (child.tagName.toLowerCase() !== 'br') {
+                        walk(child);
+                    }
+                }
+            }
+        }
+
+        document.querySelectorAll('.section-title, .cta-title, .blog-title')
             .forEach(el => {
                 if (el.dataset.fxAnimated) return;
                 el.dataset.fxAnimated = '1';
-                const text = el.innerHTML;
-                // Skip if contains nested elements like <br>
-                const hasBr = /<br\s*\/?>/i.test(text);
-                const parts = hasBr ? text.split(/<br\s*\/?>/i) : [text];
-                el.innerHTML = parts.map(part => {
-                    return [...part].map(ch => {
-                        if (ch === ' ') return '<span class="fx-letter fx-space">&nbsp;</span>';
-                        return `<span class="fx-letter">${ch}</span>`;
-                    }).join('');
-                }).join('<br>');
+
+                walk(el);
 
                 // Stagger delays per letter
                 el.querySelectorAll('.fx-letter').forEach((s, i) => {
@@ -565,7 +590,7 @@ if (window.performance && window.performance.timing) {
     // ---------- 7. Card 3D tilt ----------
     function initTilt() {
         if (reduce) return;
-        document.querySelectorAll('.project-card, .achievement-card').forEach(card => {
+        document.querySelectorAll('.project-card').forEach(card => {
             card.addEventListener('mousemove', (e) => {
                 const r = card.getBoundingClientRect();
                 const x = (e.clientX - r.left) / r.width - 0.5;
