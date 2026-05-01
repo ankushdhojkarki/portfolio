@@ -316,7 +316,7 @@ function throttle(func, limit) {
 // ============================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Vaibhav Portfolio Loaded Successfully');
+    console.log('Ankush Portfolio Loaded Successfully');
 
     // Initialize all features
     initDarkMode();
@@ -622,6 +622,8 @@ if (window.performance && window.performance.timing) {
         initMagnetic();
         initTilt();
         initCursor();
+        lucide.createIcons();
+        console.log("Lucide icons initialized");
     }
 
     if (document.readyState === 'loading') {
@@ -630,3 +632,4 @@ if (window.performance && window.performance.timing) {
         start();
     }
 })();
+
