@@ -365,7 +365,7 @@ if (window.performance && window.performance.timing) {
             return;
         }
 
-        const duration = 1900; // ms
+        const duration = 1000; // ms
         const start = performance.now();
 
         function tick(now) {
@@ -633,3 +633,8 @@ if (window.performance && window.performance.timing) {
     }
 })();
 
+document.addEventListener('DOMContentLoaded', () => {
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+});
