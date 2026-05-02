@@ -232,3 +232,5 @@ desktop.ini
 
 # Ignore image files
 static/images/
+
+.env
