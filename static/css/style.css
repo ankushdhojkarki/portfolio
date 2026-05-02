@@ -972,28 +972,51 @@ body {
     align-items: center;
 }
 
+/* 
+   New addition: This ensures the Left, Center, and Right 
+   containers all have the same width so the center is 100% accurate.
+*/
+.footer > * {
+    flex: 1;
+}
+
 .footer-text {
     color: var(--text-light);
     font-size: 0.95rem;
+    text-align: left; /* Keep your name on the left */
+}
+
+.footer-copyright {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    text-align: center; /* Force this to the exact center */
 }
 
 .footer-links {
     display: flex;
     gap: 1.5rem;
+    justify-content: flex-end; /* Keep the SVGs on the right */
 }
 
 .footer-icon {
     width: 1.5rem;
     height: 1.5rem;
-    color: var(--text-dark);
-    transition: color 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.footer-icon:hover {
-    color: var(--accent-gold);
+.footer-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: grayscale(100%) opacity(0.8); 
+    transition: all 0.3s ease;
+}
+
+.footer-icon:hover img {
+    filter: grayscale(0%) opacity(1);
+    transform: translateY(-3px);
 }
 
 /* ==========================================================================
@@ -1609,4 +1632,13 @@ img.skill-icon {
     margin: 0 auto 1.2rem auto; /* Centers it and adds bottom spacing */
 }
 
-
+@media (max-width: 768px) {
+    .footer {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    .footer-links {
+        justify-content: center;
+    }
+}
