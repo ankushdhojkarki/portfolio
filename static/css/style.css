@@ -701,6 +701,7 @@ body {
 }
 
 .skill-card {
+    min-height: 200px;
     background-color: white;
     border: 1px solid var(--gray-border);
     border-radius: 0.75rem;
@@ -1597,4 +1598,13 @@ body::before {
     align-items: center;
     scroll-margin-top: 0;
 }
+/* This ensures the external image stays inside your white box */
+img.skill-icon {
+    width: 3.5rem !important;  /* Use !important if other styles are overriding this */
+    height: 3.5rem !important;
+    object-fit: contain;       /* Keeps the logo from stretching */
+    display: block;
+    margin: 0 auto 1.2rem auto; /* Centers it and adds bottom spacing */
+}
+
 
