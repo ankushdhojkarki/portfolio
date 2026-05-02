@@ -408,6 +408,8 @@ body {
 }
 
 .btn-submit {
+    display: flex;
+    justify-content: center;
     background-color: var(--accent-gold);
     color: white;
     padding: 0.8rem 2rem;
