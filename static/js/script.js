@@ -68,7 +68,7 @@ const observer = new IntersectionObserver(function(entries) {
 document.addEventListener('DOMContentLoaded', function() {
     const cards = document.querySelectorAll('.project-card, .skill-card');
     cards.forEach(card => {
-        card.style.opacity = '0';
+        
         observer.observe(card);
     });
 });
@@ -637,4 +637,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
     }
+});
+
+// Add this to the very end of your script.js
+window.addEventListener('load', () => {
+    // Re-trigger Lucide for the dynamic project icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+    
+    // Ensure the IntersectionObserver sees the new cards
+    const cards = document.querySelectorAll('.project-card');
+    cards.forEach(card => observer.observe(card));
 });
