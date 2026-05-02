@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ankush - Portfolio</title>
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/lucide@latest"></script>
 </head>
@@ -50,7 +51,7 @@
                 <h2 class="hero-subtitle">Django Developer | Python & Backend Development | <br>System Administration Background</h2>
             </div>
             <div class="hero-image">
-                <img src="../static/images/ankush.jpg" alt="Ankush Portrait" />
+                <img src="{% static 'images/ankush.jpg' %}" alt="Ankush">
             </div>
         </div>
     </section>
@@ -88,7 +89,7 @@
                 </a>
 
                 <!-- Resume Button -->
-                <a href="../static/docs/Ankush Dhoj Karki-CV.pdf" download class="btn btn-secondary">
+                <a href="{% static 'docs/Ankush Dhoj Karki-CV.pdf' %}" download class="btn btn-secondary">
                     <i data-lucide="download" width="20" height="20"></i>
                     Download Resume
                 </a>
@@ -105,114 +106,35 @@
             <p class="section-subtitle">A curated selection of projects where I turned ideas into working products — blending backend engineering and thoughtful design.</p>
         </div>
         <div class="projects-grid">
-
+            {% for project in projects %}
             <article class="project-card" data-tilt>
                 <div class="project-image">
-                    <img src="https://via.placeholder.com/600x400/1a1a2e/d4a574?text=Lung+Cancer+AI" alt="Lung Cancer Prediction" />
+                    <!-- Use the Django image URL here -->
+                    <img src="{{ project.image.url }}" alt="{{ project.title }}">
                     <div class="project-overlay">
                         <div class="project-overlay-links">
-                            <a href="#" class="project-icon-link" aria-label="GitHub">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-4m14 6v-3.87a3.375 3.375 0 0 0-1.012-2.463l2.062-2.062a3.375 3.375 0 1 0-4.773-4.773L9.875 9.563"/></svg>
+                            {% if project.github_link %}
+                            <a href="{{ project.github_link }}" class="project-icon-link" target="_blank">
+                                <i data-lucide="github"></i>
                             </a>
-                            <a href="#" class="project-icon-link" aria-label="Live Demo">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                            {% endif %}
+                            {% if project.live_link %}
+                            <a href="{{ project.live_link }}" class="project-icon-link" target="_blank">
+                                <i data-lucide="external-link"></i>
                             </a>
-                        </div>
-                    </div>
-                    <span class="project-badge">Featured</span>
-                </div>
-                <div class="project-body">
-                    <p class="project-category">Machine Learning · Healthcare</p>
-                    <h3 class="project-title">Lung Cancer Prediction Model</h3>
-                    <p class="project-description">An AI-powered deep learning system for early detection of lung cancer from medical imaging — built to assist radiologists with faster, more accurate diagnoses.</p>
-                    <div class="project-tags">
-                        <span class="project-tag">Python</span>
-                        <span class="project-tag">TensorFlow</span>
-                        <span class="project-tag">CNN</span>
-                    </div>
-                </div>
-            </article>
-
-            <article class="project-card" data-tilt>
-                <div class="project-image">
-                    <img src="https://via.placeholder.com/600x400/1a4d2e/d4a574?text=TrafiQ" alt="TrafiQ Traffic Management" />
-                    <div class="project-overlay">
-                        <div class="project-overlay-links">
-                            <a href="#" class="project-icon-link" aria-label="GitHub">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-4m14 6v-3.87a3.375 3.375 0 0 0-1.012-2.463l2.062-2.062a3.375 3.375 0 1 0-4.773-4.773L9.875 9.563"/></svg>
-                            </a>
-                            <span class="project-icon-link is-disabled" aria-label="Coming Soon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                            </span>
-                        </div>
-                    </div>
-                    <span class="project-badge">In&nbsp;Progress</span>
-                </div>
-                <div class="project-body">
-                    <p class="project-category">AI · Smart City</p>
-                    <h3 class="project-title">TrafiQ — AI Traffic Management</h3>
-                    <p class="project-description">A smart traffic optimization system that uses real-time AI inference to reduce congestion and improve urban flow at scale.</p>
-                    <div class="project-tags">
-                        <span class="project-tag">Python</span>
-                        <span class="project-tag">YOLO</span>
-                        <span class="project-tag">Django</span>
-                    </div>
-                </div>
-            </article>
-
-            <article class="project-card" data-tilt>
-                <div class="project-image">
-                    <img src="https://via.placeholder.com/600x400/0d1b2a/d4a574?text=UIDAI+Data" alt="UIDAI Data Analysis" />
-                    <div class="project-overlay">
-                        <div class="project-overlay-links">
-                            <a href="#" class="project-icon-link" aria-label="GitHub">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-4m14 6v-3.87a3.375 3.375 0 0 0-1.012-2.463l2.062-2.062a3.375 3.375 0 1 0-4.773-4.773L9.875 9.563"/></svg>
-                            </a>
-                            <a href="#" class="project-icon-link" aria-label="Live Demo">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                            </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
                 <div class="project-body">
-                    <p class="project-category">Data Analysis · Visualization</p>
-                    <h3 class="project-title">UIDAI Aadhaar Data Analysis</h3>
-                    <p class="project-description">A large-scale data analysis and visualization project surfacing demographic insights from UIDAI's open data — millions of records distilled into clear stories.</p>
-                    <div class="project-tags">
-                        <span class="project-tag">Pandas</span>
-                        <span class="project-tag">Matplotlib</span>
-                        <span class="project-tag">SQL</span>
-                    </div>
+                    <p class="project-category">{{ project.technology }}</p>
+                    <h3 class="project-title">{{ project.title }}</h3>
+                    <p class="project-description">{{ project.description }}</p>
                 </div>
             </article>
-
-            <article class="project-card" data-tilt>
-                <div class="project-image">
-                    <img src="https://via.placeholder.com/600x400/2a5a3a/d4a574?text=Tourism+IoT" alt="Tourism Impact Assessment" />
-                    <div class="project-overlay">
-                        <div class="project-overlay-links">
-                            <a href="#" class="project-icon-link" aria-label="GitHub">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-4m14 6v-3.87a3.375 3.375 0 0 0-1.012-2.463l2.062-2.062a3.375 3.375 0 1 0-4.773-4.773L9.875 9.563"/></svg>
-                            </a>
-                            <span class="project-icon-link is-disabled" aria-label="Coming Soon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                            </span>
-                        </div>
-                    </div>
-                    <span class="project-badge">In&nbsp;Progress</span>
-                </div>
-                <div class="project-body">
-                    <p class="project-category">IoT · Sustainability</p>
-                    <h3 class="project-title">Tourism Impact Assessment</h3>
-                    <p class="project-description">An IoT- and AI-powered system that assesses the environmental and infrastructure impact of tourism on fragile destinations in real time.</p>
-                    <div class="project-tags">
-                        <span class="project-tag">IoT</span>
-                        <span class="project-tag">Python</span>
-                        <span class="project-tag">Django</span>
-                    </div>
-                </div>
-            </article>
-
+            {% empty %}
+            <p>No projects added yet. Check back soon!</p>
+            {% endfor %}
         </div>
     </section>
 
@@ -319,7 +241,7 @@
             </div>
         </div>
         <div class="blog-illustration">
-            <img src="../static/images/blog-illustration.png" alt="Blog Illustration" />
+            <img src="{% static 'images/blog-illustration.png' %}" alt="Blog Illustration" />
         </div>
     </section>
 
@@ -389,6 +311,6 @@
     </footer>
 
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="../static/js/script.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>
