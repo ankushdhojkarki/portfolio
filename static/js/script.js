@@ -80,36 +80,62 @@ document.addEventListener('DOMContentLoaded', function() {
 const contactForm = document.getElementById('contactForm');
 
 if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
+    contactForm.addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        const name = document.getElementById('name').value.trim();
-        const email = document.getElementById('email').value.trim();
+        const name    = document.getElementById('name').value.trim();
+        const email   = document.getElementById('email').value.trim();
         const message = document.getElementById('message').value.trim();
+        const btn     = contactForm.querySelector('.btn-submit');
 
-        // Simple validation
         if (!name || !email || !message) {
             alert('Please fill in all fields');
             return;
         }
 
-        // Email validation regex
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             alert('Please enter a valid email address');
             return;
         }
 
-        // Here you would typically send the form data to a server
-        // For now, we'll just show a success message
-        console.log('Form submitted:', { name, email, message });
+        btn.disabled = true;
+        btn.textContent = 'Sending…';
 
-        // Show success message
-        alert('Thank you for your message! I will get back to you soon.');
+        try {
+            const res = await fetch('/contact/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify({ name, email, message }),
+            });
 
-        // Reset form
-        contactForm.reset();
+            const data = await res.json();
+
+            if (data.success) {
+                btn.textContent = 'Sent ✓';
+                btn.style.background = '#4caf50';
+                contactForm.reset();
+            } else {
+                alert(data.error || 'Something went wrong. Please try again.');
+                btn.disabled = false;
+                btn.textContent = 'Submit ✉';
+            }
+        } catch (err) {
+            alert('Network error. Please try again.');
+            btn.disabled = false;
+            btn.textContent = 'Submit ✉';
+        }
     });
+}
+
+// Helper to read Django's CSRF cookie
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
 // ============================================================================
