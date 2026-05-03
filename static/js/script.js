@@ -617,13 +617,43 @@ if (window.performance && window.performance.timing) {
     function start() {
         initScrollProgress();
         initNavbarScroll();
-        initTitleAnim();
-        initReveal();
         initMagnetic();
         initTilt();
         initCursor();
         lucide.createIcons();
         console.log("Lucide icons initialized");
+
+        // Delay reveal & title animations until after the preloader exits
+        // The preloader takes ~1000ms to count + ~950ms exit transition = ~2000ms total
+        // We listen for the preloader to become hidden, then trigger reveals
+        function triggerRevealAfterPreloader() {
+            const preloader = document.getElementById('preloader');
+            if (!preloader) {
+                // No preloader, run immediately
+                initTitleAnim();
+                initReveal();
+                return;
+            }
+
+            // Wait until preloader has the 'is-exiting' class, then init reveals
+            // so animations play on the visible page
+            const checkExiting = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.target.classList.contains('is-exiting')) {
+                        checkExiting.disconnect();
+                        // Small extra delay to ensure preloader curtain has started opening
+                        setTimeout(() => {
+                            initTitleAnim();
+                            initReveal();
+                        }, 100);
+                    }
+                });
+            });
+
+            checkExiting.observe(preloader, { attributes: true, attributeFilter: ['class'] });
+        }
+
+        triggerRevealAfterPreloader();
     }
 
     if (document.readyState === 'loading') {
