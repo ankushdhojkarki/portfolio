@@ -1668,3 +1668,37 @@ img.skill-icon {
         justify-content: center;
     }
 }
+
+/* GitHub button - dark themed */
+.project-icon-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #24292e;
+    color: #fff;
+    transition: background 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+}
+
+/* Live button - gold accent */
+.project-icon-link--live {
+    background: var(--accent-gold);
+    color: #fff;
+}
+
+.project-icon-link:hover {
+    transform: scale(1.15);
+    background: #444d56;
+}
+
+.project-icon-link--live:hover {
+    background: var(--accent-gold);
+    filter: brightness(1.15);
+}
+
+.link-label {
+    display: none;
+}
