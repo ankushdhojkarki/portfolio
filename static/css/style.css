@@ -222,7 +222,7 @@ body {
 
 .hero {
     margin-top: 80px;
-    padding: 6rem 2rem 0;
+    padding: 0 2rem;
     background-color: var(--light-bg);
     overflow: hidden;
     position: relative;
@@ -234,8 +234,8 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
-    align-items: stretch; /* Changed from flex-start to allow vertical centering */
-    min-height: 600px;
+    align-items: center;
+    min-height: calc(100vh - 80px);
 }
 
 .hero-content {
@@ -834,6 +834,32 @@ body {
     object-fit: contain;
 }
 
+/* Override clip-path wipe for blog illustration - smooth fade + slide-up instead */
+.blog-illustration.fx-img-mask img {
+    clip-path: none !important;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.blog-illustration.fx-img-mask.is-visible img {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Override clip-path wipe for blog illustration - smooth fade + slide-up instead */
+.blog-illustration.fx-img-mask img {
+    clip-path: none !important;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.blog-illustration.fx-img-mask.is-visible img {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 @media (max-width: 900px) {
     .blog {
         grid-template-columns: 1fr;
@@ -1175,7 +1201,7 @@ section {
     position: fixed;
     inset: 0;
     z-index: 9999;
-    pointer-events: none;
+    pointer-events: all;
     overflow: hidden;
 }
 
@@ -1186,7 +1212,8 @@ section {
     bottom: 0;
     width: 50%;
     background-color: #ffffff;
-    transition: transform 0.9s cubic-bezier(0.77, 0, 0.175, 1);
+    /* Use a standard ease or cubic-bezier */
+    transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1); 
     z-index: 1;
 }
 
@@ -1618,7 +1645,6 @@ body::before {
 }
 
 #home.hero {
-    min-height: 100vh;
     display: flex;
     align-items: center;
     scroll-margin-top: 0;
