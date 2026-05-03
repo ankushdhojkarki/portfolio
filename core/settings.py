@@ -12,9 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 from pathlib import Path
-from dotenv import load_dotenv
+from decouple import config 
 
-load_dotenv() # This looks for a .env file and loads the variables
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -87,7 +86,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'portfolio_db',
         'USER': 'ankush',
-        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'PASSWORD': config('DB_PASSWORD'),
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -141,5 +140,15 @@ STATICFILES_DIRS = [BASE_DIR / 'static',]
 # For uploaded project screenshots
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+#For email 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = 'ankushdhojkarki@gmail.com'
+CONTACT_EMAIL = 'ankushdhojkarki@gmail.com' 
 
 
