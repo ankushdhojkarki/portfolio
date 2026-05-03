@@ -33,7 +33,7 @@ class ContactMessage(models.Model):
     is_read = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.name} ({self.email}) - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
+        return f"{self.name} ({self.email}) - {self.created_at.strftime('%Y-%m-%d %I:%M %p')}"
     
     class Meta:
         ordering = ['-created_at']
