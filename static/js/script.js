@@ -706,3 +706,26 @@ window.addEventListener('load', () => {
     const cards = document.querySelectorAll('.project-card');
     cards.forEach(card => observer.observe(card));
 });
+
+// ============================================
+// QUOTE ROTATOR
+// ============================================
+function rotateQuote() {
+    const p = document.querySelector('.blog-quote p');
+    if (!p) return;
+
+    p.classList.add('fade-out');
+
+    setTimeout(() => {
+        fetch('/api/quote/')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('quote-text').textContent = `"${data.text}"`;
+                document.getElementById('quote-author').textContent = `- ${data.author}`;
+                p.classList.remove('fade-out');
+            })
+            .catch(() => p.classList.remove('fade-out'));
+    }, 600);
+}
+
+setInterval(rotateQuote, 8000);

@@ -4,7 +4,6 @@ from django.db import models
 class Project(models.Model):
     title = models.CharField(max_length=150)
     description = models.TextField()
-    technology = models.CharField(max_length=50)
     image = models.ImageField(upload_to='project_images/')
     github_link = models.URLField(blank=True, null=True)
     live_link = models.URLField(blank=True, null=True)
@@ -37,3 +36,11 @@ class ContactMessage(models.Model):
     
     class Meta:
         ordering = ['-created_at']
+
+class Quote(models.Model):
+    text = models.TextField()
+    author = models.CharField(max_length=150)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f'"{self.text[:50]}..." - {self.author}'

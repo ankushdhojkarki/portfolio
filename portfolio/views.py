@@ -4,8 +4,9 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 import json
 import logging
-from .models import Project, Skill, ContactMessage
+import random
 from core import settings
+from .models import Project, Skill, ContactMessage, Quote
 
 logger = logging.getLogger(__name__)
 
@@ -44,3 +45,10 @@ def contact(request):
     except Exception as e:
         logger.exception(e)
         return JsonResponse({'success': False, 'error': 'Something went wrong.'}, status=500)
+
+def random_quote(request):
+    quotes = list(Quote.objects.filter(is_active=True))
+    if quotes:
+        q = random.choice(quotes)
+        return JsonResponse({'text': q.text, 'author': q.author})
+    return JsonResponse({'text': 'Let the beauty of what you love be what you do.', 'author': 'Rumi'})
