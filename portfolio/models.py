@@ -8,6 +8,7 @@ class Project(models.Model):
     image = models.ImageField(upload_to='project_images/')
     github_link = models.URLField(blank=True, null=True)
     live_link = models.URLField(blank=True, null=True)
+    in_progress = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

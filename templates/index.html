@@ -59,7 +59,7 @@
     <section id="about" class="about-section">
         <div class="hero-footer">
 
-            <p>Junior Django Developer and BSIT graduate experienced in engineering scalable web systems and efficient API architectures.</p>
+            <p>Junior Django Developer experienced in engineering scalable web systems and efficient API architectures.</p>
             <p class="small-text">Check out my profile! You might just like what you see</p>
         </div>
 
@@ -133,6 +133,14 @@
                     <p class="project-category">{{ project.technology }}</p>
                     <h3 class="project-title">{{ project.title }}</h3>
                     <p class="project-description">{{ project.description }}</p>
+                    {% if project.in_progress %}
+                    <div class="project-status">
+                        <span class="status-badge">
+                            <span class="status-dot"></span>
+                            In Progress
+                        </span>
+                    </div>
+                    {% endif %}
                 </div>
             </article>
             {% empty %}
@@ -240,7 +248,7 @@
                 <h2 class="blog-title">Blog</h2>
                 <div class="accent-line"></div>
                 <p class="blog-description">From algorithms to everyday adventures, I document thoughts on code, life, books, sports, and the world. Consider this my public repository of ideas - feel free to explore.</p>
-                <a href="#" class="blog-link">Step in ›</a>
+                <a href="#" class="blog-link">Step in ››</a>
             </div>
         </div>
         <div class="blog-illustration">

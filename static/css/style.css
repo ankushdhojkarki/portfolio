@@ -1601,12 +1601,23 @@ body::before {
     100% { background-position: -200% 0; }
 }
 
-/* ---------- 16. Blog link arrow slide ---------- */
+/* ---------- 16. Blog link arrow slide + breathing ---------- */
 .blog-link {
     position: relative;
     transition: color 0.3s ease, letter-spacing 0.3s ease;
+    display: inline-block;
+    animation: blogBreathe 1.6s ease-in-out infinite;
 }
-.blog-link:hover { color: var(--primary-gold); letter-spacing: 0.05em; }
+.blog-link:hover {
+    color: var(--primary-gold);
+    letter-spacing: 0.05em;
+    animation-play-state: paused;
+}
+
+@keyframes blogBreathe {
+    0%, 100% { opacity: 1;    transform: scale(1);    }
+    50%       { opacity: 0.5; transform: scale(0.95); }
+}
 
 /* ---------- 17. Highlight gold animated underline ---------- */
 .highlight-gold {
@@ -1701,4 +1712,39 @@ img.skill-icon {
 
 .link-label {
     display: none;
+}
+/* ---------- In Progress Status Badge ---------- */
+.project-status {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    background-color: rgba(212, 165, 116, 0.12);
+    border: 1px solid rgba(212, 165, 116, 0.45);
+    color: var(--accent-gold);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: var(--accent-gold);
+    animation: statusPulse 1.8s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+@keyframes statusPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.45; transform: scale(0.75); }
 }
