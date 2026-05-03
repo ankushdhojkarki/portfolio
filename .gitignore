@@ -234,3 +234,8 @@ desktop.ini
 static/images/
 
 .env
+.vercel
+
+__pycache__/
+*.pyc
+.vercel
