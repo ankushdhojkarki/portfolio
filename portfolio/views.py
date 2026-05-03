@@ -3,7 +3,11 @@ from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 import json
+import logging
 from .models import Project, Skill, ContactMessage
+from core import settings
+
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 def home(request):
@@ -17,19 +21,26 @@ def home(request):
 
 @require_POST
 def contact(request):
-    data = json.loads(request.body)
+    try:
+        data = json.loads(request.body)
+        name = data.get('name', '').strip()
+        email = data.get('email', '').strip()
+        message = data.get('message', '').strip()
 
-    name = data['name']
-    email = data['email']
-    message = data['message']
+        if not all([name, email, message]):
+            return JsonResponse({'success': False, 'error': 'All fields are required.'}, status=400)
 
-    ContactMessage.objects.create(name=name, email=email, message=message)
 
-    send_mail(
-        subject = f'New message from {name}',
-        message = f'Email: {email}\n\n{message}',
-        from_email= email,
-        recipient_list= ['ankushdhojkarki@gmail.com'],
-    )
+        ContactMessage.objects.create(name=name, email=email, message=message)
 
-    return JsonResponse({'success': True})
+        send_mail(
+            subject = f'New message from {name}',
+            message = f'Email: {email}\n\n{message}',
+            from_email= settings.DEFAULT_FROM_EMAIL,
+            recipient_list= ['ankushdhojkarki@gmail.com'],
+        )
+        return JsonResponse({'success': True})
+
+    except Exception as e:
+        logger.exception(e)
+        return JsonResponse({'success': False, 'error': 'Something went wrong.'}, status=500)
