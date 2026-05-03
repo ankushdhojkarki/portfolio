@@ -13,3 +13,14 @@ class Project(models.Model):
 
     def __str__(self):
         return self.title
+
+class Skill(models.Model):
+    name = models.CharField(max_length=100)
+    icon_url = models.URLField()
+    order = models.PositiveBigIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+    
+    def __str__(self):
+        return self.name
