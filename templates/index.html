@@ -159,82 +159,14 @@
             </div>
         </div>
         <div class="skills-grid">
-        <div class="skill-card">
-            <!-- Official HTML5 logo for professional frontend branding -->
-            <img class="skill-icon" src="https://www.vectorlogo.zone/logos/w3_html5/w3_html5-icon.svg" alt="HTML5 Logo">
-            <p>HTML5</p>
-        </div>
-        <div class="skill-card">
-            <!-- Official CSS3 logo for high-quality frontend branding -->
-            <img class="skill-icon" src="https://www.vectorlogo.zone/logos/w3_css/w3_css-icon.svg" alt="CSS3 Logo">
-            <p>CSS3</p>
-        </div>
-        <div class="skill-card">
-            <!-- Official Python logo for brand consistency -->
-            <img class="skill-icon" src="https://www.vectorlogo.zone/logos/python/python-icon.svg" alt="Python Logo">
-            <p>Python</p>
-        </div>
-        <div class="skill-card">
-            <!-- Official Django logo for brand consistency -->
-            <img class="skill-icon" src="https://www.vectorlogo.zone/logos/djangoproject/djangoproject-icon.svg" alt="Django Logo">
-            <p>Django</p>
-        </div>
-        <div class="skill-card">
-            <!-- Using a high-compatibility web version of the DRF logo -->
-            <img class="skill-icon" src="https://img.icons8.com/color/48/django.png" alt="Django REST Framework Logo">
-            <p>Django REST Framework</p>
-        </div>
-        <div class="skill-card">
-            <!-- Official PostgreSQL logo for consistent database branding -->
-            <img class="skill-icon" src="https://www.vectorlogo.zone/logos/postgresql/postgresql-icon.svg" alt="PostgreSQL Logo">
-            <p>PostgreSQL</p>
-        </div>
-        <div class="skill-card">
-            <!-- Using a direct image source for the official logo -->
-            <img class="skill-icon" src="https://www.vectorlogo.zone/logos/mysql/mysql-official.svg" alt="MySQL Logo">
-            <p>MySQL</p>
-        </div>
-        <div class="skill-card">
-            <!-- Official Redis logo for high-quality backend branding -->
-            <img class="skill-icon" src="https://www.vectorlogo.zone/logos/redis/redis-icon.svg" alt="Redis Logo">
-            <p>Redis</p>
-        </div>
-        <div class="skill-card">
-            <!-- Using a more reliable CDN for the Matplotlib logo -->
-            <img class="skill-icon" src="https://cdn.worldvectorlogo.com/logos/matplotlib-1.svg" alt="Matplotlib Logo">
-            <p>Matplotlib</p>
-        </div>
-        <div class="skill-card">
-            <!-- Official Bootstrap logo for a professional, high-quality look -->
-            <img class="skill-icon" src="https://www.vectorlogo.zone/logos/getbootstrap/getbootstrap-icon.svg" alt="Bootstrap Logo">
-            <p>Bootstrap</p>
-        </div>
-        <div class="skill-card">
-            <!-- Official GitHub Octocat logo for brand consistency -->
-            <img class="skill-icon" src="https://www.vectorlogo.zone/logos/github/github-icon.svg" alt="GitHub Logo">
-            <p>GitHub</p>
-        </div>
-        <div class="skill-card">
-            <!-- Official Microsoft Active Directory icon for professional clarity -->
-            <img class="skill-icon" src="https://www.vectorlogo.zone/logos/microsoft_azure/microsoft_azure-icon.svg" alt="Active Directory Logo">
-            <p>Active Directory</p>
-        </div>
-        <div class="skill-card">
-            <!-- Using the official ManageEngine favicon/logo for high clarity -->
-            <img class="skill-icon" src="https://www.manageengine.com/favicon.ico" alt="ManageEngine Endpoint Central Logo">
-            <p>Endpoint Central</p>
-        </div>
-        <div class="skill-card">
-                <img src="https://cdn.worldvectorlogo.com/logos/postman.svg" class="skill-icon" alt="Postman">
-                <p>Postman</p>
+            {% for skill in skills %}
+            <div class="skill-card">
+                <img class="skill-icon" src="{{ skill.icon_url }}" alt="{{ skill.name }} Logo">
+                <p>{{ skill.name }}</p>
             </div>
-        <div class="skill-card">
-            <img class="skill-icon" src="https://www.vectorlogo.zone/logos/numpy/numpy-icon.svg" alt="NumPy Logo">
-            <p>NumPy</p>
-        </div>
-        <div class="skill-card">
-            <img class="skill-icon" src="https://www.vectorlogo.zone/logos/javascript/javascript-icon.svg" alt="JavaScript Logo">
-            <p>JavaScript</p>
+            {% empty %}
+            <p>No skills added yet.</p>
+            {% endfor %}
         </div>
     </section>
 
