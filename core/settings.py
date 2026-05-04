@@ -93,7 +93,7 @@ DATABASES = {
     #     'PORT': '5432',
     # }
         'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL')
+            default=config('DATABASE_URL')
     )
 }
 
