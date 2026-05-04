@@ -230,9 +230,6 @@ media/
 Thumbs.db
 desktop.ini
 
-# Ignore image files
-static/images/
-
 .env
 .vercel
 
