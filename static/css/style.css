@@ -1753,3 +1753,368 @@ img.skill-icon {
     0%, 100% { opacity: 1; transform: scale(1); }
     50%       { opacity: 0.45; transform: scale(0.75); }
 }
+/* ==========================================================================
+   MOBILE RESPONSIVENESS — COMPREHENSIVE FIX
+   ========================================================================== */
+
+/* ── Navbar: hamburger menu on mobile ────────────────────────────────────── */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-dark);
+    padding: 0.25rem 0.5rem;
+    line-height: 1;
+    z-index: 1001;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.75rem 0;
+    }
+
+    .navbar-container {
+        padding: 0 1.25rem;
+        position: relative;
+    }
+
+    .mobile-menu-btn {
+        display: block;
+    }
+
+    /* Hide nav links by default on mobile; show when .active */
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(12px);
+        border-top: 1px solid var(--gray-border);
+        border-bottom: 1px solid var(--gray-border);
+        padding: 1rem 1.25rem 1.5rem;
+        gap: 0;
+        z-index: 999;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links li {
+        width: 100%;
+    }
+
+    .nav-link {
+        display: block;
+        padding: 0.7rem 0;
+        font-size: 0.9rem;
+        border-bottom: 1px solid var(--gray-border);
+    }
+
+    .nav-links li:last-child .nav-link {
+        border-bottom: none;
+    }
+}
+
+/* ── Hero section ────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .hero {
+        padding: 0 1.25rem;
+        margin-top: 60px;
+    }
+
+    .hero-container {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        padding: 2.5rem 0 3rem;
+        gap: 2rem;
+        /* Image first, text below — matches typical portfolio mobile layout */
+        grid-template-rows: auto auto;
+    }
+
+    /* Put image on top, content below */
+    .hero-image {
+        order: -1;
+        aspect-ratio: 4/3;
+        max-height: 320px;
+        border-radius: 0.75rem;
+    }
+
+    .hero-content {
+        order: 0;
+    }
+
+    .hero-title {
+        font-size: 2.2rem;
+        line-height: 1.15;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+        line-height: 1.5;
+    }
+
+    .accent-line {
+        margin-bottom: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 1.85rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .hero-image {
+        aspect-ratio: 3/2;
+        max-height: 240px;
+    }
+}
+
+/* ── About / Hero footer ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .hero-footer {
+        margin-top: 2rem;
+        padding: 1.5rem 1.25rem;
+        text-align: center;
+    }
+
+    .hero-footer p {
+        font-size: 1rem;
+    }
+}
+
+/* ── CTA section ─────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .cta-section {
+        padding: 3.5rem 1.25rem;
+    }
+
+    .cta-title {
+        font-size: 1.6rem;
+        letter-spacing: 0.08em;
+    }
+
+    .cta-description {
+        font-size: 0.95rem;
+        margin-bottom: 2rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .cta-buttons .btn {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+    }
+}
+
+/* ── Projects section ────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .projects {
+        padding: 4rem 1.25rem;
+    }
+
+    .section-header {
+        margin-bottom: 2.5rem;
+    }
+
+    .section-title {
+        font-size: 1.75rem;
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    /* Show project overlay links always on mobile (no hover) */
+    .project-overlay {
+        opacity: 1;
+        background: linear-gradient(180deg, transparent 50%, rgba(20,20,30,0.7) 100%);
+    }
+
+    .project-overlay-links {
+        transform: translateY(0);
+    }
+}
+
+/* ── Skills section ──────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .skills {
+        padding: 4rem 1.25rem;
+    }
+
+    .section-header-left {
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .section-header-left .section-title {
+        text-align: center;
+    }
+
+    .skills-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+    }
+
+    .skill-card {
+        min-height: 130px;
+        padding: 1.25rem 0.5rem;
+    }
+
+    .skill-card p {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ── Blog section ────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+    .blog {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 4rem 1.25rem;
+        text-align: center;
+        max-width: 100%;
+    }
+
+    .blog-quote {
+        text-align: center;
+        padding-right: 0;
+        order: 2;
+    }
+
+    .blog-main {
+        order: 1;
+        margin: 0 auto;
+        max-width: 100%;
+    }
+
+    .blog-illustration {
+        order: 3;
+    }
+
+    .blog-quote p {
+        font-size: 1.1rem;
+    }
+
+    .blog-illustration img {
+        height: 280px;
+    }
+}
+
+/* ── Contact section ─────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .contact {
+        padding: 4rem 1.25rem;
+    }
+
+    .contact-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .contact-description {
+        max-width: 100%;
+    }
+
+    .contact-form-container {
+        min-height: auto;
+    }
+
+    .contact-card {
+        padding: 1.75rem 1.25rem;
+        margin: 0;
+        border-radius: 0.75rem;
+    }
+
+    .contact-card h3 {
+        font-size: 1.2rem;
+    }
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .footer {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+        padding: 2rem 1.25rem;
+    }
+
+    .footer > * {
+        flex: none;
+        width: 100%;
+        text-align: center;
+    }
+
+    .footer-links {
+        justify-content: center;
+    }
+
+    .footer-text {
+        order: 3;
+        text-align: center;
+    }
+
+    .footer-copyright {
+        order: 2;
+    }
+
+    .footer-links {
+        order: 1;
+    }
+}
+
+/* ── General section padding on small screens ────────────────────────────── */
+@media (max-width: 480px) {
+    .projects,
+    .skills,
+    .blog,
+    .contact {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+/* ── Prevent horizontal overflow globally ────────────────────────────────── */
+html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+/* ── Disable parallax & tilt on touch devices ────────────────────────────── */
+@media (hover: none) {
+    .hero-image {
+        transform: none !important;
+        transition: none !important;
+    }
+
+    .project-card {
+        transform: none !important;
+    }
+
+    .project-card:hover {
+        transform: translateY(-4px) !important;
+    }
+}

@@ -145,38 +145,47 @@ function getCookie(name) {
 }
 
 // ============================================================================
-// MOBILE MENU TOGGLE (for smaller screens)
+// MOBILE MENU TOGGLE
 // ============================================================================
 
 function initMobileMenu() {
-    const navbar = document.querySelector('.navbar');
+    const container = document.querySelector('.navbar-container');
     const navLinks = document.querySelector('.nav-links');
-    const logo = document.querySelector('.logo');
+    if (!container || !navLinks) return;
 
-    // Create mobile menu button if screen is small
-    if (window.innerWidth <= 768) {
-        if (!document.querySelector('.mobile-menu-btn')) {
-            const menuBtn = document.createElement('button');
-            menuBtn.className = 'mobile-menu-btn';
-            menuBtn.innerHTML = '☰';
-            navbar.querySelector('.navbar-container').appendChild(menuBtn);
+    // Always inject the button (CSS hides it on desktop)
+    if (!document.querySelector('.mobile-menu-btn')) {
+        const menuBtn = document.createElement('button');
+        menuBtn.className = 'mobile-menu-btn';
+        menuBtn.setAttribute('aria-label', 'Open menu');
+        menuBtn.innerHTML = '&#9776;'; // ☰
+        container.appendChild(menuBtn);
 
-            menuBtn.addEventListener('click', function() {
-                navLinks.classList.toggle('active');
+        menuBtn.addEventListener('click', function () {
+            const isOpen = navLinks.classList.toggle('active');
+            menuBtn.innerHTML = isOpen ? '&#10005;' : '&#9776;'; // ✕ or ☰
+            menuBtn.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+        });
+
+        // Close on nav link click
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                menuBtn.innerHTML = '&#9776;';
             });
+        });
 
-            // Close menu when a link is clicked
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', function() {
-                    navLinks.classList.remove('active');
-                });
-            });
-        }
+        // Close on outside tap
+        document.addEventListener('click', (e) => {
+            if (!container.contains(e.target)) {
+                navLinks.classList.remove('active');
+                menuBtn.innerHTML = '&#9776;';
+            }
+        });
     }
 }
 
 document.addEventListener('DOMContentLoaded', initMobileMenu);
-window.addEventListener('resize', initMobileMenu);
 
 // ============================================================================
 // BUTTON HOVER EFFECTS
