@@ -30,7 +30,12 @@
     <nav class="navbar">
         <div class="navbar-container">
             <div class="logo">ANKUSH</div>
-            <ul class="nav-links">
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu" aria-expanded="false">
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
                 <li><a href="#home" class="nav-link">HOME</a></li>
                 <li><a href="#about" class="nav-link">ABOUT</a></li>
                 <li><a href="#projects" class="nav-link">PROJECTS</a></li>
@@ -202,7 +207,6 @@
                 <h3>Have Something To Write?</h3>
                 <p class="contact-subtitle">Contact Me</p>
                 <form class="contact-form" id="contactForm">
-                    {% csrf_token %}
                     <div class="form-group">
                         <label for="name">Name:</label>
                         <input type="text" id="name" name="name" placeholder="Your Name" required>

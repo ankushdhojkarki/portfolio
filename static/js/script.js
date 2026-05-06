@@ -124,68 +124,64 @@ if (contactForm) {
                 btn.textContent = 'Submit ✉';
             }
         } catch (err) {
-            console.error('Contact form error:', err);
-            alert('Could not reach the server. Check your connection and try again.');
+            alert('Network error. Please try again.');
             btn.disabled = false;
             btn.textContent = 'Submit ✉';
         }
     });
 }
 
-// Helper to read Django's CSRF token — checks hidden input first, then cookie
+// Helper to read Django's CSRF cookie
 function getCookie(name) {
-    // Try the {% csrf_token %} hidden input first (works even when cookies are restricted)
-    const inputEl = document.querySelector('[name=csrfmiddlewaretoken]');
-    if (inputEl) return inputEl.value;
-
-    // Fallback: read from cookie
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
 // ============================================================================
+// ============================================================================
 // MOBILE MENU TOGGLE
 // ============================================================================
 
-function initMobileMenu() {
-    const container = document.querySelector('.navbar-container');
-    const navLinks = document.querySelector('.nav-links');
-    if (!container || !navLinks) return;
+document.addEventListener('DOMContentLoaded', function () {
+    const btn = document.getElementById('mobileMenuBtn');
+    const navLinks = document.getElementById('navLinks');
+    if (!btn || !navLinks) return;
 
-    // Always inject the button (CSS hides it on desktop)
-    if (!document.querySelector('.mobile-menu-btn')) {
-        const menuBtn = document.createElement('button');
-        menuBtn.className = 'mobile-menu-btn';
-        menuBtn.setAttribute('aria-label', 'Open menu');
-        menuBtn.innerHTML = '&#9776;'; // ☰
-        container.appendChild(menuBtn);
-
-        menuBtn.addEventListener('click', function () {
-            const isOpen = navLinks.classList.toggle('active');
-            menuBtn.innerHTML = isOpen ? '&#10005;' : '&#9776;'; // ✕ or ☰
-            menuBtn.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
-        });
-
-        // Close on nav link click
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                menuBtn.innerHTML = '&#9776;';
-            });
-        });
-
-        // Close on outside tap
-        document.addEventListener('click', (e) => {
-            if (!container.contains(e.target)) {
-                navLinks.classList.remove('active');
-                menuBtn.innerHTML = '&#9776;';
-            }
-        });
+    function openMenu() {
+        navLinks.classList.add('active');
+        btn.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+        btn.setAttribute('aria-label', 'Close menu');
     }
-}
 
-document.addEventListener('DOMContentLoaded', initMobileMenu);
+    function closeMenu() {
+        navLinks.classList.remove('active');
+        btn.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.setAttribute('aria-label', 'Open menu');
+    }
+
+    btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        navLinks.classList.contains('active') ? closeMenu() : openMenu();
+    });
+
+    navLinks.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!btn.contains(e.target) && !navLinks.contains(e.target)) {
+            closeMenu();
+        }
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeMenu();
+    });
+});
+
 
 // ============================================================================
 // BUTTON HOVER EFFECTS
@@ -316,12 +312,16 @@ function toggleTheme() {
 // ============================================================================
 
 document.addEventListener('keydown', function(event) {
-    // Skip if key is not ESC or if focused on form input
+    // Escape key: mobile menu is handled by the mobile menu block above
     if (event.key !== 'Escape') return;
-
-    const mobileMenu = document.querySelector('.nav-links.active');
-    if (mobileMenu) {
-        mobileMenu.classList.remove('active');
+    // Close mobile menu and reset button state
+    const navLinks = document.getElementById('navLinks');
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    if (navLinks) navLinks.classList.remove('active');
+    if (menuBtn) {
+        menuBtn.classList.remove('is-open');
+        menuBtn.setAttribute('aria-expanded', 'false');
+        menuBtn.setAttribute('aria-label', 'Open menu');
     }
 });
 

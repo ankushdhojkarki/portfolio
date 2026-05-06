@@ -1758,16 +1758,48 @@ img.skill-icon {
    ========================================================================== */
 
 /* ── Navbar: hamburger menu on mobile ────────────────────────────────────── */
+
+/* Button hidden on desktop */
 .mobile-menu-btn {
     display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
     background: none;
     border: none;
-    font-size: 1.5rem;
     cursor: pointer;
-    color: var(--text-dark);
-    padding: 0.25rem 0.5rem;
-    line-height: 1;
-    z-index: 1001;
+    padding: 6px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    z-index: 1100;
+}
+
+/* The three bars */
+.hamburger-bar {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background-color: var(--text-dark);
+    border-radius: 2px;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity   0.25s ease,
+                width     0.3s ease;
+    transform-origin: center;
+}
+
+/* Bars animate into X when open */
+.mobile-menu-btn.is-open .hamburger-bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+.mobile-menu-btn.is-open .hamburger-bar:nth-child(2) {
+    opacity: 0;
+    width: 0;
+}
+.mobile-menu-btn.is-open .hamburger-bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
 }
 
 @media (max-width: 768px) {
@@ -1781,29 +1813,37 @@ img.skill-icon {
     }
 
     .mobile-menu-btn {
-        display: block;
+        display: flex;
     }
 
-    /* Hide nav links by default on mobile; show when .active */
+    /* Nav links: smooth slide-down drawer */
     .nav-links {
-        display: none;
+        display: flex;
         flex-direction: column;
         position: absolute;
-        top: 100%;
+        top: calc(100% + 1px);
         left: 0;
         right: 0;
         background-color: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(12px);
-        border-top: 1px solid var(--gray-border);
+        backdrop-filter: blur(16px);
         border-bottom: 1px solid var(--gray-border);
-        padding: 1rem 1.25rem 1.5rem;
+        padding: 0.5rem 0;
         gap: 0;
-        z-index: 999;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        z-index: 1000;
+        box-shadow: 0 12px 32px rgba(0,0,0,0.10);
+        /* Slide animation */
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        pointer-events: none;
+        transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                    opacity 0.3s ease;
     }
 
     .nav-links.active {
-        display: flex;
+        max-height: 400px;
+        opacity: 1;
+        pointer-events: all;
     }
 
     .nav-links li {
@@ -1812,13 +1852,19 @@ img.skill-icon {
 
     .nav-link {
         display: block;
-        padding: 0.7rem 0;
-        font-size: 0.9rem;
-        border-bottom: 1px solid var(--gray-border);
+        padding: 0.85rem 1.5rem;
+        font-size: 0.85rem;
+        letter-spacing: 0.1em;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
     }
 
     .nav-links li:last-child .nav-link {
         border-bottom: none;
+    }
+
+    /* Kill the underline animation inside the dropdown */
+    .nav-link::after {
+        display: none;
     }
 }
 
