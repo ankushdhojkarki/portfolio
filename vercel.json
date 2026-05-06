@@ -3,24 +3,17 @@
   "builds": [
     {
       "src": "core/wsgi.py",
-      "use": "@vercel/python",
-      "config": { "maxLambdaSize": "15mb", "runtime": "python3.11" }
+      "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/static/(.*)",
-      "dest": "core/wsgi.py",
-      "headers": {
-        "Cache-Control": "public, max-age=31536000, immutable"
-      }
+      "dest": "/staticfiles/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "core/wsgi.py",
-      "headers": {
-        "Cache-Control": "no-cache, no-store, must-revalidate"
-      }
+      "dest": "core/wsgi.py"
     }
   ]
 }
