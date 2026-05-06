@@ -202,6 +202,7 @@
                 <h3>Have Something To Write?</h3>
                 <p class="contact-subtitle">Contact Me</p>
                 <form class="contact-form" id="contactForm">
+                    {% csrf_token %}
                     <div class="form-group">
                         <label for="name">Name:</label>
                         <input type="text" id="name" name="name" placeholder="Your Name" required>

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import ensure_csrf_cookie
 import json
 import logging
 import random
@@ -11,6 +12,7 @@ from .models import Project, Skill, ContactMessage, Quote
 logger = logging.getLogger(__name__)
 
 # Create your views here.
+@ensure_csrf_cookie
 def home(request):
     projects = Project.objects.all().order_by('-date_created')
     skills = Skill.objects.all()

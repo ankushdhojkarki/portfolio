@@ -124,15 +124,21 @@ if (contactForm) {
                 btn.textContent = 'Submit ✉';
             }
         } catch (err) {
-            alert('Network error. Please try again.');
+            console.error('Contact form error:', err);
+            alert('Could not reach the server. Check your connection and try again.');
             btn.disabled = false;
             btn.textContent = 'Submit ✉';
         }
     });
 }
 
-// Helper to read Django's CSRF cookie
+// Helper to read Django's CSRF token — checks hidden input first, then cookie
 function getCookie(name) {
+    // Try the {% csrf_token %} hidden input first (works even when cookies are restricted)
+    const inputEl = document.querySelector('[name=csrfmiddlewaretoken]');
+    if (inputEl) return inputEl.value;
+
+    // Fallback: read from cookie
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
