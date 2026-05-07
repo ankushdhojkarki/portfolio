@@ -1,3 +1,2 @@
 #!/bin/bash
-PYTHONPATH=/vercel/path0/.vercel_python_packages python manage.py collectstatic --noinput --clear
-PYTHONPATH=/vercel/path0/.vercel_python_packages python manage.py migrate
+/uv/python/versions/cpython-3.12.13-linux-x86_64-gnu/bin/python manage.py collectstatic --noinput --clear
