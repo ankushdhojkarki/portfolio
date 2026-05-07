@@ -180,3 +180,7 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = 'ankushdhojkarki@gmail.com'
 CONTACT_EMAIL = 'ankushdhojkarki@gmail.com'
+
+if os.environ.get('VERCEL_BUILD'):
+    STORAGES['staticfiles']['BACKEND'] = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
