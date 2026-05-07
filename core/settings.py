@@ -30,22 +30,14 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': config('CLOUDINARY_API_SECRET'),
 }
 
-if config('VERCEL', default=False, cast=bool):
-    STATICFILES_BACKEND = "whitenoise.storage.CompressedStaticFilesStorage"
-else:
-    STATICFILES_BACKEND = "django.contrib.staticfiles.storage.StaticFilesStorage"
-
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": STATICFILES_BACKEND,
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
-
-# For old cloudinary_storage compatibility
-STATICFILES_STORAGE = STATICFILES_BACKEND
 
 
 # Quick-start development settings - unsuitable for production
