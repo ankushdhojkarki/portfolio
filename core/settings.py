@@ -40,6 +40,8 @@ STORAGES = {
 }
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -184,3 +186,5 @@ CONTACT_EMAIL = 'ankushdhojkarki@gmail.com'
 if os.environ.get('VERCEL_BUILD'):
     STORAGES['staticfiles']['BACKEND'] = 'django.contrib.staticfiles.storage.StaticFilesStorage'
     STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+
+WHITENOISE_USE_FINDERS = True
