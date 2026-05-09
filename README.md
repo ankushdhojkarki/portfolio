@@ -227,3 +227,9 @@ Junior Django Developer | Python & Backend Development | System Administration B
 
 ---
 
+## License
+
+This project is licensed under the MIT License.
+
+---
+
