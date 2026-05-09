@@ -158,11 +158,24 @@ EMAIL_HOST_PASSWORD
     {
       "src": "core/wsgi.py",
       "use": "@vercel/python",
-      "config": { "maxLambdaSize": "15mb", "runtime": "python3.11" }
+      "config": { "maxLambdaSize": "15mb", "runtime": "python3.12" }
     }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "core/wsgi.py" }
+    {
+      "src": "/static/(.*)",
+      "dest": "core/wsgi.py",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "core/wsgi.py",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
+    }
   ]
 }
 ```
