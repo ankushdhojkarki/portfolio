@@ -8,6 +8,9 @@ import logging
 import random
 from core import settings
 from .models import Project, Skill, ContactMessage, Quote
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .serializers import ProjectSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -54,3 +57,9 @@ def random_quote(request):
         q = random.choice(quotes)
         return JsonResponse({'text': q.text, 'author': q.author})
     return JsonResponse({'text': 'Let the beauty of what you love be what you do.', 'author': 'Rumi'})
+
+@api_view(['GET'])
+def project_list(request):
+    projects = Project.objects.all()
+    serializer = ProjectSerializer(projects, many=True)
+    return Response(serializer.data)
