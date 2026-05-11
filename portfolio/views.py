@@ -10,7 +10,7 @@ from core import settings
 from .models import Project, Skill, ContactMessage, Quote
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import ProjectSerializer
+from .serializers import ProjectSerializer, SkillSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -62,4 +62,10 @@ def random_quote(request):
 def project_list(request):
     projects = Project.objects.all()
     serializer = ProjectSerializer(projects, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def skill_list(request):
+    skills = Skill.objects.all()
+    serializer = SkillSerializer(skills, many=True)
     return Response(serializer.data)
