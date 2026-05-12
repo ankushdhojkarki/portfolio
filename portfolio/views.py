@@ -12,6 +12,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from .serializers import ProjectSerializer, SkillSerializer
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 
 logger = logging.getLogger(__name__)
 
@@ -59,14 +60,23 @@ def random_quote(request):
         return JsonResponse({'text': q.text, 'author': q.author})
     return JsonResponse({'text': 'Let the beauty of what you love be what you do.', 'author': 'Rumi'})
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def project_list(request):
-    projects = Project.objects.all()
-    serializer = ProjectSerializer(projects, many=True)
-    return Response(serializer.data)
+    if request.method == 'GET':
+        projects = Project.objects.all()
+        serializer = ProjectSerializer(projects, many=True)
+        return Response(serializer.data)
+    
+    if request.method == 'POST':
+        serializer = ProjectSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET'])
+
+@api_view(['GET',])
 def skill_list(request):
     skills = Skill.objects.all()
     serializer = SkillSerializer(skills, many=True)

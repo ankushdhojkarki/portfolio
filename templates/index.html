@@ -114,7 +114,9 @@
             <article class="project-card" data-tilt>
                 <div class="project-image">
                     <!-- Use the Django image URL here -->
-                    <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                    {% if project.image %}
+                        <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                    {% endif %}
                     <div class="project-overlay">
                         <div class="project-overlay-links">
                             {% if project.github_link %}
