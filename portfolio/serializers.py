@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Project, Skill
 
 class ProjectSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=False)
     class Meta:
         model = Project
         fields = '__all__'
