@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'portfolio',
     'cloudinary',
     'rest_framework',
+    'rest_framework.authtoken',
     
 
 ]
@@ -189,3 +190,9 @@ if os.environ.get('VERCEL_BUILD'):
     STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 WHITENOISE_USE_FINDERS = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
