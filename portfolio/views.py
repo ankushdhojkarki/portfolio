@@ -75,7 +75,7 @@ def project_list(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET', 'PUT'])
+@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def project_detail(request, pk):
     try:
@@ -87,12 +87,17 @@ def project_detail(request, pk):
         serializer = ProjectSerializer(project)
         return Response(serializer.data)
     
-    if request.method == 'PUT':
-        serializer = ProjectSerializer(project, data=request.data)
+    if request.method in ['PUT', 'PATCH']:
+        is_partial = (request.method == 'PATCH')
+        serializer = ProjectSerializer(project, data=request.data, partial = is_partial)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    if request.method == 'DELETE':
+        project.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
     
 
 @api_view(['GET',])
