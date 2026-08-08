@@ -1,0 +1,43 @@
+{% load static %}
+<section id="blog" class="blog" data-section="05">
+    <div class="blog__grid">
+        <div class="blog__main">
+            <p class="mono section__label" data-reveal><span class="section__num">05</span> Writing</p>
+            <h2 class="section__title" data-split-words>Notes from the long way round.</h2>
+            <p class="blog__desc" data-reveal>
+                From Django internals to long-distance rides, I write about code, life,
+                and the world between the curves. Consider it a public repository of ideas.
+            </p>
+
+            <figure class="quote" id="quoteBlock" data-reveal>
+                <blockquote>
+                    <p id="quote-text">"Let the beauty of what you love be what you do."</p>
+                </blockquote>
+                <figcaption class="mono" id="quote-author">— Rumi</figcaption>
+            </figure>
+
+            <a href="#" class="btn btn--ghost blog__cta" data-reveal aria-disabled="true">
+                Coming soon
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+        </div>
+
+        <div class="blog__art" data-reveal>
+            <picture>
+                <source type="image/avif"
+                        srcset="{% static 'images/blog-illustration-420.avif' %} 420w,
+                                {% static 'images/blog-illustration-640.avif' %} 640w,
+                                {% static 'images/blog-illustration-900.avif' %} 900w"
+                        sizes="(max-width: 900px) 70vw, min(34vw, 420px)">
+                <source type="image/webp"
+                        srcset="{% static 'images/blog-illustration-420.webp' %} 420w,
+                                {% static 'images/blog-illustration-640.webp' %} 640w,
+                                {% static 'images/blog-illustration-900.webp' %} 900w"
+                        sizes="(max-width: 900px) 70vw, min(34vw, 420px)">
+                <img src="{% static 'images/blog-illustration-640.png' %}"
+                     width="640" height="609" loading="lazy" decoding="async"
+                     alt="Illustration representing writing and reflection">
+            </picture>
+        </div>
+    </div>
+</section>

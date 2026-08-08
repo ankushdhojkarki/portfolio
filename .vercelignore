@@ -1,0 +1,5 @@
+env/
+staticfiles/
+static/images/source/
+tools/
+.git/
