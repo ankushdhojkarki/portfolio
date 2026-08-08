@@ -223,7 +223,12 @@ body.is-ready .hero__portrait .portrait__frame { animation: portraitIn var(--dur
 
 /* Users who opted out of the pinned rail via reduced motion get the grid. */
 @media (prefers-reduced-motion: reduce) {
-    .rail .rail__stage { position: static; min-height: 0; overflow: visible; }
+    .rail .rail__stage {
+        position: static;
+        display: block;
+        min-height: 0;
+        overflow: visible;
+    }
     .rail .rail__track {
         transform: none;
         display: grid;

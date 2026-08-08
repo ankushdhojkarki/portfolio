@@ -114,6 +114,16 @@ def main():
         p2.goto(URL, wait_until="load")
         p2.wait_for_function("document.body.classList.contains('is-ready')", timeout=15000)
 
+        # No horizontal overflow, and the closed sheet must not be tabbable.
+        check("no horizontal scroll (mobile)",
+              not p2.evaluate("document.documentElement.scrollWidth > document.documentElement.clientWidth"))
+        check("closed menu not focusable",
+              p2.evaluate("""() => {
+                  const panel = document.getElementById('navLinks');
+                  return [...panel.querySelectorAll('a')].every(a => a.offsetParent === null
+                      || getComputedStyle(panel).visibility === 'hidden');
+              }"""))
+
         p2.click("#menuBtn")
         p2.wait_for_timeout(500)
         expanded = p2.get_attribute("#menuBtn", "aria-expanded")
