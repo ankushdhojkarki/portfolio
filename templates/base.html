@@ -29,8 +29,8 @@
     {# ---------- Icons ---------- #}
     <link rel="icon" href="{% static 'images/favicon.svg' %}" type="image/svg+xml">
     <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
-    <meta name="theme-color" content="#0b0b0c" media="(prefers-color-scheme: dark)">
-    <meta name="theme-color" content="#faf9f7" media="(prefers-color-scheme: light)">
+    {# Kept in sync with the active theme by js/modules/theme.js #}
+    <meta name="theme-color" content="#0b0b0c" id="themeColor">
 
     {# ---------- Theme resolution before first paint (prevents flash) ---------- #}
     <script>
@@ -39,11 +39,14 @@
             // Marks that scripting is available, so CSS can show JS-driven
             // chrome (the preloader) only when something will dismiss it.
             root.classList.add('js');
+            // Dark is the site's default on every device. The OS preference is
+            // deliberately ignored: light mode is opt-in via the nav toggle,
+            // and only a stored choice can override the default.
+            var theme = 'dark';
             try {
-                var stored = localStorage.getItem('theme');
-                var system = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-                root.setAttribute('data-theme', stored || system);
+                if (localStorage.getItem('theme') === 'light') theme = 'light';
             } catch (e) { /* private mode - keep the dark default */ }
+            root.setAttribute('data-theme', theme);
         })();
     </script>
 
