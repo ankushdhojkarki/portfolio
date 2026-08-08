@@ -627,16 +627,91 @@ section {
     margin-top: var(--sp-8);
 }
 
-.footer__mark {
-    font-size: var(--fs-mega);
-    font-weight: 700;
-    line-height: 0.82;
-    letter-spacing: -0.05em;
-    text-align: center;
-    color: transparent;
-    -webkit-text-stroke: 1px var(--line-loud);
-    user-select: none;
-    margin-bottom: var(--sp-6);
+.footer__lead {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: clamp(2.5rem, 1rem + 5vw, 6rem);
+    padding-bottom: var(--sp-8);
+}
+
+/* ---------- Closing call to action ---------- */
+.footer__headline {
+    font-size: var(--fs-xl);
+    margin: var(--sp-4) 0 var(--sp-6);
+    max-width: 14ch;
+}
+
+.footer__mail {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    font-size: var(--fs-md);
+    font-weight: 550;
+    color: var(--text);
+    letter-spacing: -0.015em;
+    transition: color var(--dur-fast) var(--ease-out);
+}
+
+/* Underline wipes in from the left on hover. */
+.footer__mail-text {
+    background-image: linear-gradient(var(--accent-fill), var(--accent-fill));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 100% 1px;
+    padding-bottom: 0.15em;
+    transition: background-size var(--dur-mid) var(--ease-mech);
+}
+
+.footer__mail svg {
+    width: 1rem; height: 1rem;
+    flex: none;
+    color: var(--text-faint);
+    transition: transform var(--dur-mid) var(--ease-mech),
+                color var(--dur-fast) var(--ease-out);
+}
+
+.footer__mail:hover { color: var(--accent-ink); }
+.footer__mail:hover .footer__mail-text { background-size: 0% 1px; }
+.footer__mail:hover svg { transform: translate(3px, -3px); color: var(--accent-ink); }
+
+/* ---------- Link columns ---------- */
+.footer__cols {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-5);
+    align-content: start;
+}
+
+.footer__col-title {
+    color: var(--text-faint);
+    padding-bottom: var(--sp-3);
+    margin-bottom: var(--sp-3);
+    border-bottom: 1px solid var(--line-soft);
+}
+
+.footer__col li + li { margin-top: var(--sp-2); }
+
+.footer__col a,
+.footer__static {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    font-size: var(--fs-sm);
+    color: var(--text-dim);
+}
+
+.footer__col a { transition: color var(--dur-fast) var(--ease-out); }
+.footer__col a:hover { color: var(--accent-ink); }
+
+.footer__col a svg {
+    width: 0.9rem; height: 0.9rem;
+    flex: none;
+    opacity: 0.75;
+}
+
+.footer__clock {
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
 }
 
 .footer__row {
@@ -683,11 +758,27 @@ section {
         background: var(--bg-elev);
         border-left: 1px solid var(--line);
         transform: translateX(100%);
-        transition: transform var(--dur-mid) var(--ease-mech);
         overflow-y: auto;
+
+        /* `display: none` when closed rather than just an off-screen
+           transform. Parking a fixed panel to the right of the viewport
+           leaves it in layout: it widens the document (horizontal scroll on
+           phones) and keeps its links in the tab order while invisible.
+           allow-discrete + @starting-style keep the slide-in animation. */
+        display: none;
+        transition: transform var(--dur-mid) var(--ease-mech),
+                    display var(--dur-mid) var(--ease-mech) allow-discrete;
     }
 
-    .nav__links.is-open { transform: translateX(0); }
+    .nav__links.is-open {
+        display: block;
+        transform: translateX(0);
+    }
+
+    /* Entry state, so the panel slides in rather than appearing. */
+    @starting-style {
+        .nav__links.is-open { transform: translateX(100%); }
+    }
 
     .nav__links ul {
         flex-direction: column;
@@ -703,11 +794,16 @@ section {
 
     .nav__link.is-active::after { left: var(--sp-4); right: auto; width: 1.5rem; }
 
+    .footer__lead { grid-template-columns: 1fr; gap: var(--sp-7); }
     .footer__built { display: none; }
 }
 
 @media (max-width: 620px) {
     .field-row { grid-template-columns: 1fr; }
+    .footer__cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-6); }
+    /* The email address must never force a horizontal scroll. */
+    .footer__mail { font-size: var(--fs-sm); }
+    .footer__mail-text { overflow-wrap: anywhere; }
     .toast-stack { left: var(--sp-4); right: var(--sp-4); bottom: var(--sp-4); }
     .toast { max-width: none; }
     .nav__logo-dim { display: none; }

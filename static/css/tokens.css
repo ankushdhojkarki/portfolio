@@ -22,7 +22,6 @@
     --fs-2xl:     clamp(2.25rem,  1.6rem  + 3.1vw,   4rem);
     /* Capped so a four-line hero title still clears a 900px viewport. */
     --fs-display: clamp(2.75rem,  1.5rem  + 5.2vw,   6.25rem);
-    --fs-mega:    clamp(3.5rem,  -0.5rem  + 17vw,   14rem);
 
     --lh-tight: 0.92;
     --lh-snug:  1.12;

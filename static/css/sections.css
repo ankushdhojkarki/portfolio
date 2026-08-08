@@ -401,7 +401,15 @@
 .pcard__links { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: auto; padding-top: var(--sp-3); }
 
 /* ---------- Rail degrades to a grid when pinning is off ---------- */
-.rail.is-static .rail__stage { position: static; min-height: 0; overflow: visible; }
+/* display must drop back to block: as a flex item the grid track sizes to
+   max-content, so auto-fill resolves to one column per card and overflows
+   the viewport instead of wrapping. */
+.rail.is-static .rail__stage {
+    position: static;
+    display: block;
+    min-height: 0;
+    overflow: visible;
+}
 .rail.is-static .rail__track {
     transform: none;
     display: grid;

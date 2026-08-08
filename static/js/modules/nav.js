@@ -81,7 +81,10 @@ function initMobileSheet() {
             scrim.hidden = false;
             requestAnimationFrame(() => scrim.classList.add('is-visible'));
         }
-        $(FOCUSABLE, panel)?.focus();
+        // The panel is visibility:hidden until `is-open` lands, and an
+        // element that is not yet visible cannot take focus - so wait a
+        // frame for style and layout to settle.
+        requestAnimationFrame(() => $(FOCUSABLE, panel)?.focus());
     };
 
     const close = ({ restoreFocus = true } = {}) => {

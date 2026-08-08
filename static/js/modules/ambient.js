@@ -92,21 +92,23 @@ export function initCounters() {
     nodes.forEach((n) => io.observe(n));
 }
 
-/* ---------- Kathmandu clock ---------- */
+/* ---------- Kathmandu clock (contact aside + footer) ---------- */
 export function initClock() {
-    const el = $('#localTime');
-    if (!el) return;
+    const nodes = $$('[data-clock]');
+    if (!nodes.length) return;
 
     const tick = () => {
+        let text = '';
         try {
-            el.textContent = new Intl.DateTimeFormat('en-GB', {
+            text = new Intl.DateTimeFormat('en-GB', {
                 hour: '2-digit',
                 minute: '2-digit',
                 timeZone: 'Asia/Kathmandu',
             }).format(new Date()) + ' NPT';
         } catch {
-            el.textContent = '';
+            text = '';
         }
+        nodes.forEach((el) => { el.textContent = text; });
     };
 
     tick();
