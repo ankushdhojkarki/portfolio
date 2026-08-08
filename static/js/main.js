@@ -8,6 +8,7 @@
 import { initScroll, remeasure } from './modules/scroll.js';
 import { initTheme } from './modules/theme.js';
 import { initNav } from './modules/nav.js';
+import { initAnchors, repositionToHash } from './modules/anchors.js';
 import { initSplit } from './modules/split.js';
 import { initReveal, revealAll } from './modules/reveal.js';
 import { initPreloader } from './modules/preloader.js';
@@ -33,6 +34,7 @@ function boot() {
     safe('scroll', initScroll);
     safe('theme', initTheme);
     safe('nav', initNav);
+    safe('anchors', initAnchors);
     safe('reveal', initReveal);
     safe('rail', initRail);
     safe('field', initField);
@@ -53,6 +55,9 @@ function boot() {
             document.querySelectorAll('.hero [data-reveal], .hero [data-split], .hero [data-reveal-stagger]')
                 .forEach((el) => el.classList.add('is-in'));
             remeasure();
+            // Scroll was locked while the preloader ran, so a URL opened at
+            // #contact could not be positioned until now.
+            safe('hash', repositionToHash);
         })
     );
 

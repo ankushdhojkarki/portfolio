@@ -53,7 +53,12 @@ function initBarBehaviour() {
     onScrollFrame(({ y, dir, progress: p }) => {
         nav.classList.toggle('is-scrolled', y > 24);
         // Tuck away when scrolling down past the hero, restore on scroll up.
-        nav.classList.toggle('is-tucked', dir === 1 && y > 420 && !nav.dataset.locked);
+        // `locked` is the open mobile sheet; `hold` is an in-flight anchor
+        // jump — hiding the bar mid-navigation strands the other links.
+        nav.classList.toggle(
+            'is-tucked',
+            dir === 1 && y > 420 && !nav.dataset.locked && !nav.dataset.hold
+        );
         if (progress) progress.style.setProperty('--progress', (p * 100).toFixed(2) + '%');
     });
 }
