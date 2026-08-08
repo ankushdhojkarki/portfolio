@@ -1,0 +1,86 @@
+<section id="projects" class="projects" data-section="03">
+    <div class="section__head">
+        <p class="mono section__label" data-reveal><span class="section__num">03</span> Selected work</p>
+        <h2 class="section__title" data-split-words>Things I built, and what they taught me.</h2>
+        <p class="section__sub" data-reveal>
+            A curated set of projects where an idea turned into something that actually runs.
+        </p>
+    </div>
+
+    {% comment %}
+    Desktop: the track is translated horizontally while the stage is pinned.
+    Mobile / reduced-motion: it degrades to a normal vertical stack via CSS.
+    {% endcomment %}
+    <div class="rail" id="projectRail" data-rail>
+        <div class="rail__stage">
+            <div class="rail__track" id="projectTrack">
+                {% for project in projects %}
+                <article class="pcard" data-rail-item style="--i: {{ forloop.counter0 }}">
+                    <div class="pcard__media">
+                        {% if project.image %}
+                            <img src="{{ project.image.url }}" alt="{{ project.title }}"
+                                 loading="lazy" decoding="async" class="pcard__img">
+                        {% else %}
+                            <div class="pcard__img pcard__img--empty" aria-hidden="true">
+                                <span class="mono">{{ project.title|slice:":2"|upper }}</span>
+                            </div>
+                        {% endif %}
+                        <span class="mono pcard__index">{{ forloop.counter|stringformat:"02d" }}</span>
+                        {% if project.in_progress %}
+                        <span class="pcard__status">
+                            <span class="pcard__status-dot" aria-hidden="true"></span>
+                            In progress
+                        </span>
+                        {% endif %}
+                    </div>
+
+                    <div class="pcard__body">
+                        {% comment %}
+                        The `technology` field was dropped by migration 0008 and is NOT
+                        in the database. To restore the tech-tag row:
+                          1. Re-add to Project:  technology = models.CharField(max_length=100, blank=True, null=True)
+                          2. makemigrations && migrate (additive, nullable - safe on a live DB)
+                          3. Delete this comment wrapper to activate the markup below.
+                        <ul class="pcard__tags mono">
+                            {% for tech in project.technology|split:"," %}<li>{{ tech|strip }}</li>{% endfor %}
+                        </ul>
+                        {% endcomment %}
+                        <h3 class="pcard__title">{{ project.title }}</h3>
+                        <p class="pcard__desc">{{ project.description }}</p>
+
+                        <div class="pcard__links">
+                            {% if project.github_link %}
+                            <a href="{{ project.github_link }}" target="_blank" rel="noopener noreferrer"
+                               class="pill" aria-label="{{ project.title }} source on GitHub">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-github"/></svg>
+                                Source
+                            </a>
+                            {% endif %}
+                            {% if project.live_link %}
+                            <a href="{{ project.live_link }}" target="_blank" rel="noopener noreferrer"
+                               class="pill pill--accent" aria-label="{{ project.title }} live demo">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-out"/></svg>
+                                Live
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </article>
+                {% empty %}
+                <article class="pcard pcard--empty">
+                    <div class="pcard__body">
+                        <h3 class="pcard__title">Nothing here yet</h3>
+                        <p class="pcard__desc">Projects are managed in the admin and will appear here once added.</p>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="rail__hud mono" aria-hidden="true">
+            <span id="railCurrent">01</span>
+            <span class="rail__hud-bar"><span class="rail__hud-fill" id="railFill"></span></span>
+            <span id="railTotal">{{ projects|length|stringformat:"02d" }}</span>
+        </div>
+    </div>
+</section>

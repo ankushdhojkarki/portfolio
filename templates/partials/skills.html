@@ -1,0 +1,20 @@
+<section id="skills" class="skills" data-section="04">
+    <div class="section__head">
+        <p class="mono section__label" data-reveal><span class="section__num">04</span> Stack</p>
+        <h2 class="section__title" data-split-words>The tools I reach for.</h2>
+        <p class="section__sub" data-reveal>
+            Move your cursor through the field — everything here is something I've shipped with.
+        </p>
+    </div>
+
+    <div class="field" id="skillField" data-field>
+        {% for skill in skills %}
+        <div class="chip" data-field-item style="--i: {{ forloop.counter0 }}">
+            <img class="chip__icon" src="{{ skill.icon_url }}" alt="" loading="lazy" decoding="async" aria-hidden="true">
+            <span class="chip__name">{{ skill.name }}</span>
+        </div>
+        {% empty %}
+        <p class="field__empty">No skills added yet.</p>
+        {% endfor %}
+    </div>
+</section>
