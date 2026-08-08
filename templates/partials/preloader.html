@@ -1,0 +1,17 @@
+{# Tracks real asset progress; main.js drives the counter and hands off to the hero. #}
+<div class="preloader" id="preloader" role="progressbar" aria-label="Loading" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+    <div class="preloader__inner">
+        <div class="preloader__name" aria-hidden="true">
+            <span class="preloader__word">
+                <i>A</i><i>N</i><i>K</i><i>U</i><i>S</i><i>H</i>
+            </span>
+        </div>
+        <div class="preloader__meta">
+            <span class="mono preloader__label">Loading</span>
+            <span class="mono preloader__count" id="preloaderCount">000</span>
+        </div>
+        <div class="preloader__track">
+            <div class="preloader__fill" id="preloaderFill"></div>
+        </div>
+    </div>
+</div>

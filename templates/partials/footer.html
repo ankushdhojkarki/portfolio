@@ -1,0 +1,76 @@
+<footer class="footer">
+    <div class="footer__lead">
+        <div class="footer__cta">
+            <p class="mono eyebrow" data-reveal>
+                <span class="eyebrow__dot" aria-hidden="true"></span>
+                Available for work
+            </p>
+            <h2 class="footer__headline" data-split-words>Let's work together.</h2>
+            <a href="mailto:ankushdhojkarki@gmail.com" class="footer__mail" data-reveal>
+                <span class="footer__mail-text">ankushdhojkarki@gmail.com</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-out"/></svg>
+            </a>
+        </div>
+
+        <div class="footer__cols" data-reveal-stagger>
+            <nav class="footer__col" aria-label="Footer">
+                <p class="mono footer__col-title">Navigate</p>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#projects">Work</a></li>
+                    <li><a href="#skills">Stack</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+
+            <div class="footer__col">
+                <p class="mono footer__col-title">Elsewhere</p>
+                <ul>
+                    <li>
+                        <a href="https://github.com/ankushdhojkarki" target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-github"/></svg>
+                            GitHub
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.linkedin.com/in/ankush-dhoj-karki-59b0742ab/" target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-linkedin"/></svg>
+                            LinkedIn
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.instagram.com/ankuskarki/" target="_blank" rel="noopener noreferrer">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-instagram"/></svg>
+                            Instagram
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="footer__col">
+                <p class="mono footer__col-title">Based in</p>
+                <ul>
+                    <li><span class="footer__static">Kathmandu, Nepal</span></li>
+                    <li><span class="mono footer__clock" data-clock>—</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer__row">
+        <p class="mono footer__meta">
+            &copy; <span id="year"></span> Ankush Dhoj Karki
+        </p>
+        <p class="mono footer__meta footer__built">
+            Built with Django · Deployed on Vercel
+        </p>
+        <a href="#home" class="mono footer__top">
+            Back to top
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+        </a>
+    </div>
+</footer>
+
+{% include 'partials/icons.html' %}

@@ -1,0 +1,879 @@
+/* ==========================================================================
+   BASE — reset, typography, shell, nav, buttons, forms, footer, toasts
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+* { margin: 0; padding: 0; }
+
+html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* Fixed nav is ~72px; keep anchors clear of it. */
+    scroll-padding-top: 6rem;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: var(--fs-base);
+    line-height: var(--lh-body);
+    font-synthesis-weight: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    transition: background-color var(--dur-mid) var(--ease-out),
+                color var(--dur-mid) var(--ease-out);
+}
+
+body.is-locked { overflow: hidden; }
+
+img, svg, picture, video { display: block; max-width: 100%; }
+img { height: auto; }
+
+a { color: inherit; text-decoration: none; }
+
+button, input, textarea, select {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: none;
+}
+
+button { cursor: pointer; }
+
+ul, ol { list-style: none; }
+
+::selection {
+    background: var(--accent-fill);
+    color: var(--on-accent);
+}
+
+/* ---------- Typography primitives ---------- */
+.mono {
+    font-family: var(--font-mono);
+    font-size: var(--fs-mono);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+h1, h2, h3, h4 {
+    font-weight: 600;
+    line-height: var(--lh-snug);
+    letter-spacing: var(--tracking-tight);
+    text-wrap: balance;
+}
+
+p { text-wrap: pretty; }
+
+strong { font-weight: 650; color: var(--text); }
+
+/* ==========================================================================
+   ACCESSIBILITY
+   ========================================================================== */
+
+.skip-link {
+    position: fixed;
+    top: var(--sp-3);
+    left: var(--sp-3);
+    z-index: calc(var(--z-preload) + 1);
+    padding: var(--sp-3) var(--sp-5);
+    background: var(--accent-fill);
+    color: var(--on-accent);
+    border-radius: var(--r-full);
+    font-family: var(--font-mono);
+    font-size: var(--fs-mono);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    transform: translateY(calc(-100% - var(--sp-5)));
+    transition: transform var(--dur-fast) var(--ease-out);
+}
+.skip-link:focus-visible { transform: translateY(0); }
+
+/* A single, consistent focus ring everywhere. */
+:focus-visible {
+    outline: 2px solid var(--accent-ink);
+    outline-offset: 3px;
+    border-radius: var(--r-sm);
+}
+:focus:not(:focus-visible) { outline: none; }
+
+.visually-hidden {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/* Copy that only makes sense with a mouse (e.g. "move your cursor"). */
+.hover-only { display: none; }
+@media (hover: hover) and (pointer: fine) {
+    .hover-only { display: inline; }
+}
+
+
+/* ==========================================================================
+   BACKDROP — fixed engineered grid + ambient glow + film grain
+   ========================================================================== */
+
+.backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-backdrop);
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.backdrop__grid {
+    position: absolute;
+    inset: -1px;
+    background-image:
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: clamp(3rem, 7vw, 6.5rem) clamp(3rem, 7vw, 6.5rem);
+    mask-image: radial-gradient(ellipse 120% 80% at 50% 0%, #000 30%, transparent 78%);
+}
+
+/* Follows the pointer; --gx/--gy are written by js/modules/backdrop.js */
+.backdrop__glow {
+    position: absolute;
+    top: 0; left: 0;
+    width: 62vmax; height: 62vmax;
+    margin: -31vmax 0 0 -31vmax;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+        rgb(from var(--accent-fill) r g b / 0.15) 0%,
+        rgb(from var(--accent-fill) r g b / 0.06) 35%,
+        transparent 68%);
+    transform: translate3d(var(--gx, 50vw), var(--gy, 30vh), 0);
+    transition: opacity var(--dur-slow) var(--ease-out);
+    will-change: transform;
+}
+
+/* Fallback for engines without relative colour syntax. */
+@supports not (color: rgb(from white r g b / 0.1)) {
+    .backdrop__glow {
+        background: radial-gradient(circle, var(--accent-soft) 0%, transparent 68%);
+    }
+}
+
+.backdrop__noise {
+    position: absolute;
+    inset: 0;
+    opacity: var(--noise-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+}
+
+main { position: relative; z-index: var(--z-content); }
+
+/* ==========================================================================
+   LAYOUT SHELL
+   ========================================================================== */
+
+section {
+    position: relative;
+    max-width: var(--maxw);
+    margin-inline: auto;
+    padding: var(--section-y) var(--gutter);
+}
+
+.section__head {
+    max-width: var(--maxw-prose);
+    margin-bottom: clamp(3rem, 1.5rem + 5vw, 5.5rem);
+}
+
+.section__label {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    color: var(--accent-ink);
+    margin-bottom: var(--sp-5);
+}
+
+.section__num {
+    color: var(--text-faint);
+    padding-right: var(--sp-3);
+    border-right: 1px solid var(--line);
+}
+
+.section__title {
+    font-size: var(--fs-2xl);
+    line-height: var(--lh-snug);
+}
+
+.section__sub {
+    margin-top: var(--sp-5);
+    font-size: var(--fs-md);
+    color: var(--text-dim);
+    max-width: 42ch;
+}
+
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    color: var(--text-dim);
+}
+
+.eyebrow__dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 0 0 rgb(111 207 151 / 0.55);
+    animation: pulse 2.4s var(--ease-out) infinite;
+}
+
+@keyframes pulse {
+    70%  { box-shadow: 0 0 0 9px rgb(111 207 151 / 0); }
+    100% { box-shadow: 0 0 0 0 rgb(111 207 151 / 0); }
+}
+
+/* ==========================================================================
+   NAVIGATION
+   ========================================================================== */
+
+.nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: var(--z-nav);
+    border-bottom: 1px solid transparent;
+    transition: transform var(--dur-mid) var(--ease-out),
+                border-color var(--dur-mid) var(--ease-out),
+                background-color var(--dur-mid) var(--ease-out);
+}
+
+/* The blur lives on a pseudo-element, not on .nav itself. backdrop-filter
+   makes an element the containing block for its position: fixed
+   descendants, which trapped the mobile sheet inside the header instead of
+   letting it fill the viewport. A pseudo-element has no such effect. */
+.nav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: color-mix(in srgb, var(--bg) 72%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    transition: background-color var(--dur-mid) var(--ease-out);
+}
+
+.nav.is-scrolled { border-bottom-color: var(--line); }
+
+/* Hide the bar while scrolling down, bring it back on scroll up. */
+.nav.is-tucked { transform: translateY(-100%); }
+
+.nav__inner {
+    max-width: var(--maxw);
+    margin-inline: auto;
+    padding: var(--sp-4) var(--gutter);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-5);
+}
+
+.nav__logo {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    font-weight: 650;
+    letter-spacing: var(--tracking-tight);
+}
+
+.nav__logo-mark {
+    display: grid;
+    place-items: center;
+    width: 2rem; height: 2rem;
+    border-radius: var(--r-sm);
+    background: var(--accent-fill);
+    color: var(--on-accent);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    transition: transform var(--dur-mid) var(--ease-mech);
+}
+.nav__logo:hover .nav__logo-mark { transform: rotate(-8deg) scale(1.06); }
+
+.nav__logo-text { font-size: var(--fs-sm); }
+.nav__logo-dim { color: var(--text-faint); font-weight: 400; }
+
+.nav__links ul {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+}
+
+.nav__link {
+    position: relative;
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--sp-2);
+    padding: var(--sp-2) var(--sp-4);
+    border-radius: var(--r-full);
+    font-size: var(--fs-sm);
+    color: var(--text-dim);
+    transition: color var(--dur-fast) var(--ease-out),
+                background-color var(--dur-fast) var(--ease-out);
+}
+
+.nav__idx {
+    font-size: 0.5625rem;
+    color: var(--text-faint);
+    transition: color var(--dur-fast) var(--ease-out);
+}
+
+.nav__link:hover { color: var(--text); background: var(--bg-elev-2); }
+.nav__link.is-active { color: var(--text); }
+.nav__link.is-active .nav__idx { color: var(--accent-ink); }
+
+.nav__link.is-active::after {
+    content: '';
+    position: absolute;
+    left: var(--sp-4); right: var(--sp-4); bottom: 0.25rem;
+    height: 1px;
+    background: var(--accent-fill);
+    transform-origin: left;
+    animation: drawIn var(--dur-mid) var(--ease-out);
+}
+
+@keyframes drawIn { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* Sits above the mobile sheet, which is fixed at the same z-index and
+   would otherwise paint over the close button. */
+.nav__actions {
+    position: relative;
+    z-index: calc(var(--z-nav) + 1);
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+}
+
+.nav__progress {
+    position: absolute;
+    left: 0; bottom: -1px;
+    height: 2px;
+    width: var(--progress, 0%);
+    background: linear-gradient(90deg, var(--accent-fill), var(--accent-ink));
+    transition: width 80ms linear;
+}
+
+/* ---------- Theme toggle ---------- */
+.theme-toggle {
+    display: grid;
+    place-items: center;
+    width: 2.25rem; height: 2.25rem;
+    border-radius: var(--r-full);
+    border: 1px solid var(--line);
+    color: var(--text-dim);
+    transition: color var(--dur-fast) var(--ease-out),
+                border-color var(--dur-fast) var(--ease-out),
+                background-color var(--dur-fast) var(--ease-out);
+}
+.theme-toggle:hover {
+    color: var(--accent-ink);
+    border-color: var(--line-loud);
+    background: var(--bg-elev-2);
+}
+
+.theme-toggle__track { position: relative; width: 1.05rem; height: 1.05rem; }
+
+.theme-toggle__icon {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    transition: transform var(--dur-mid) var(--ease-mech),
+                opacity var(--dur-fast) var(--ease-out);
+}
+
+/* Dark theme shows the sun (the action: switch to light). */
+:root[data-theme='dark'] .theme-toggle__icon--moon { opacity: 0; transform: rotate(-70deg) scale(0.5); }
+:root[data-theme='dark'] .theme-toggle__icon--sun  { opacity: 1; transform: rotate(0) scale(1); }
+:root[data-theme='light'] .theme-toggle__icon--sun  { opacity: 0; transform: rotate(70deg) scale(0.5); }
+:root[data-theme='light'] .theme-toggle__icon--moon { opacity: 1; transform: rotate(0) scale(1); }
+
+/* ---------- Hamburger ---------- */
+.menu-btn {
+    display: none;
+    place-items: center;
+    width: 2.25rem; height: 2.25rem;
+    border-radius: var(--r-full);
+    border: 1px solid var(--line);
+}
+
+.menu-btn__bar {
+    display: block;
+    width: 1rem; height: 1.5px;
+    background: currentColor;
+    border-radius: 2px;
+    transition: transform var(--dur-mid) var(--ease-mech),
+                opacity var(--dur-fast) var(--ease-out);
+}
+.menu-btn__bar + .menu-btn__bar { margin-top: 4px; }
+
+.menu-btn.is-open .menu-btn__bar:first-child { transform: translateY(2.75px) rotate(45deg); }
+.menu-btn.is-open .menu-btn__bar:last-child  { transform: translateY(-2.75px) rotate(-45deg); }
+
+.nav__scrim {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-scrim);
+    background: rgb(0 0 0 / 0.5);
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    transition: opacity var(--dur-mid) var(--ease-out);
+}
+.nav__scrim.is-visible { opacity: 1; }
+
+/* ==========================================================================
+   BUTTONS & PILLS
+   ========================================================================== */
+
+.btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: 0.9rem 1.6rem;
+    border-radius: var(--r-full);
+    font-size: var(--fs-sm);
+    font-weight: 550;
+    letter-spacing: -0.01em;
+    overflow: hidden;
+    isolation: isolate;
+    transition: transform var(--dur-fast) var(--ease-out),
+                color var(--dur-fast) var(--ease-out),
+                border-color var(--dur-fast) var(--ease-out),
+                box-shadow var(--dur-mid) var(--ease-out);
+}
+
+.btn svg {
+    width: 1rem; height: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform var(--dur-mid) var(--ease-mech);
+}
+
+.btn--primary {
+    background: var(--accent-fill);
+    color: var(--on-accent);
+    box-shadow: var(--shadow-md);
+}
+.btn--primary:hover { box-shadow: var(--shadow-lg); }
+.btn--primary:hover svg { transform: translateX(3px); }
+
+.btn--ghost {
+    border: 1px solid var(--line-loud);
+    color: var(--text);
+}
+.btn--ghost::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--bg-elev-2);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform var(--dur-mid) var(--ease-mech);
+}
+.btn--ghost:hover::before { transform: scaleY(1); }
+.btn--ghost:hover { border-color: var(--accent-fill); color: var(--accent-ink); }
+.btn--ghost:hover svg { transform: translateY(2px); }
+
+.btn:active { transform: scale(0.975); }
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    padding: 0.5rem 0.95rem;
+    border-radius: var(--r-full);
+    border: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: var(--fs-mono);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--text-dim);
+    transition: color var(--dur-fast) var(--ease-out),
+                border-color var(--dur-fast) var(--ease-out),
+                background-color var(--dur-fast) var(--ease-out),
+                transform var(--dur-fast) var(--ease-out);
+}
+.pill svg { width: 0.85rem; height: 0.85rem; }
+.pill:hover {
+    color: var(--text);
+    border-color: var(--line-loud);
+    background: var(--bg-elev-2);
+    transform: translateY(-2px);
+}
+.pill--accent:hover { color: var(--accent-ink); border-color: var(--accent-fill); }
+
+/* ==========================================================================
+   FORM
+   ========================================================================== */
+
+.form { display: flex; flex-direction: column; gap: var(--sp-5); }
+
+.field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-5);
+}
+
+.field-group { position: relative; }
+
+.field-group input,
+.field-group textarea {
+    width: 100%;
+    padding: 1.4rem 1.1rem 0.7rem;
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    font-size: var(--fs-base);
+    color: var(--text);
+    transition: border-color var(--dur-fast) var(--ease-out),
+                box-shadow var(--dur-fast) var(--ease-out),
+                background-color var(--dur-fast) var(--ease-out);
+}
+
+.field-group textarea { resize: vertical; min-height: 9rem; line-height: 1.6; }
+
+/* Floating label driven purely by :placeholder-shown */
+.field-group label {
+    position: absolute;
+    left: 1.15rem;
+    top: 1.05rem;
+    font-size: var(--fs-sm);
+    color: var(--text-faint);
+    pointer-events: none;
+    transform-origin: left top;
+    transition: transform var(--dur-fast) var(--ease-out),
+                color var(--dur-fast) var(--ease-out);
+}
+
+.field-group input:not(:placeholder-shown) + label,
+.field-group textarea:not(:placeholder-shown) + label,
+.field-group input:focus + label,
+.field-group textarea:focus + label {
+    transform: translateY(-0.62rem) scale(0.74);
+    color: var(--accent-ink);
+}
+
+.field-group input:focus,
+.field-group textarea:focus {
+    outline: none;
+    border-color: var(--accent-fill);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.field-group.has-error input,
+.field-group.has-error textarea { border-color: var(--danger); }
+
+.field-error {
+    margin-top: var(--sp-2);
+    color: var(--danger);
+    text-transform: none;
+    letter-spacing: 0.02em;
+}
+
+.btn--submit { align-self: flex-start; min-width: 12rem; justify-content: center; }
+.btn--submit .btn__spinner {
+    position: absolute;
+    width: 1.05rem; height: 1.05rem;
+    border: 2px solid rgb(from var(--on-accent) r g b / 0.3);
+    border-top-color: var(--on-accent);
+    border-radius: 50%;
+    opacity: 0;
+    animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.btn--submit.is-busy .btn__label,
+.btn--submit.is-busy .btn__icon { opacity: 0; }
+.btn--submit.is-busy .btn__spinner { opacity: 1; }
+.btn--submit[disabled] { cursor: not-allowed; }
+
+.btn--submit.is-done { background: var(--success); }
+
+/* ==========================================================================
+   TOASTS  (replaces alert())
+   ========================================================================== */
+
+.toast-stack {
+    position: fixed;
+    right: var(--sp-5);
+    bottom: var(--sp-5);
+    z-index: var(--z-toast);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    pointer-events: none;
+}
+
+.toast {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--sp-3);
+    max-width: 22rem;
+    padding: var(--sp-4) var(--sp-5);
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent-fill);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-lg);
+    font-size: var(--fs-sm);
+    pointer-events: auto;
+    animation: toastIn var(--dur-mid) var(--ease-mech);
+}
+.toast--success { border-left-color: var(--success); }
+.toast--error   { border-left-color: var(--danger); }
+.toast.is-leaving { animation: toastOut var(--dur-fast) var(--ease-out) forwards; }
+
+@keyframes toastIn  { from { opacity: 0; transform: translateY(14px) scale(0.97); } }
+@keyframes toastOut { to   { opacity: 0; transform: translateX(20px); } }
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+.footer {
+    position: relative;
+    z-index: var(--z-content);
+    max-width: var(--maxw);
+    margin-inline: auto;
+    padding: var(--sp-9) var(--gutter) var(--sp-6);
+    border-top: 1px solid var(--line);
+    margin-top: var(--sp-8);
+}
+
+.footer__lead {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: clamp(2.5rem, 1rem + 5vw, 6rem);
+    padding-bottom: var(--sp-8);
+}
+
+/* ---------- Closing call to action ---------- */
+.footer__headline {
+    font-size: var(--fs-xl);
+    margin: var(--sp-4) 0 var(--sp-6);
+    max-width: 14ch;
+}
+
+.footer__mail {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    font-size: var(--fs-md);
+    font-weight: 550;
+    color: var(--text);
+    letter-spacing: -0.015em;
+    transition: color var(--dur-fast) var(--ease-out);
+}
+
+/* Underline wipes in from the left on hover. */
+.footer__mail-text {
+    background-image: linear-gradient(var(--accent-fill), var(--accent-fill));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 100% 1px;
+    padding-bottom: 0.15em;
+    transition: background-size var(--dur-mid) var(--ease-mech);
+}
+
+.footer__mail svg {
+    width: 1rem; height: 1rem;
+    flex: none;
+    color: var(--text-faint);
+    transition: transform var(--dur-mid) var(--ease-mech),
+                color var(--dur-fast) var(--ease-out);
+}
+
+.footer__mail:hover { color: var(--accent-ink); }
+.footer__mail:hover .footer__mail-text { background-size: 0% 1px; }
+.footer__mail:hover svg { transform: translate(3px, -3px); color: var(--accent-ink); }
+
+/* ---------- Link columns ---------- */
+.footer__cols {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-5);
+    align-content: start;
+}
+
+.footer__col-title {
+    color: var(--text-faint);
+    padding-bottom: var(--sp-3);
+    margin-bottom: var(--sp-3);
+    border-bottom: 1px solid var(--line-soft);
+}
+
+.footer__col li + li { margin-top: var(--sp-2); }
+
+.footer__col a,
+.footer__static {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    font-size: var(--fs-sm);
+    color: var(--text-dim);
+}
+
+.footer__col a { transition: color var(--dur-fast) var(--ease-out); }
+.footer__col a:hover { color: var(--accent-ink); }
+
+.footer__col a svg {
+    width: 0.9rem; height: 0.9rem;
+    flex: none;
+    opacity: 0.75;
+}
+
+.footer__clock {
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
+}
+
+.footer__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-4);
+    padding-top: var(--sp-5);
+    border-top: 1px solid var(--line-soft);
+}
+
+.footer__meta { color: var(--text-faint); }
+
+.footer__top {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    color: var(--text-dim);
+    transition: color var(--dur-fast) var(--ease-out);
+}
+.footer__top svg {
+    width: 0.9rem; height: 0.9rem;
+    fill: none; stroke: currentColor; stroke-width: 2;
+    stroke-linecap: round; stroke-linejoin: round;
+    transition: transform var(--dur-mid) var(--ease-mech);
+}
+.footer__top:hover { color: var(--accent-ink); }
+.footer__top:hover svg { transform: translateY(-3px); }
+
+/* ==========================================================================
+   RESPONSIVE — navigation collapses to a sheet
+   ========================================================================== */
+
+@media (max-width: 940px) {
+    .menu-btn { display: grid; }
+
+    .nav__links {
+        position: fixed;
+        inset: 0 0 0 auto;
+        width: min(20rem, 82vw);
+        z-index: var(--z-nav);
+        padding: 6rem var(--sp-6) var(--sp-6);
+        background: var(--bg-elev);
+        border-left: 1px solid var(--line);
+        transform: translateX(100%);
+        overflow-y: auto;
+
+        /* `display: none` when closed rather than just an off-screen
+           transform. Parking a fixed panel to the right of the viewport
+           leaves it in layout: it widens the document (horizontal scroll on
+           phones) and keeps its links in the tab order while invisible.
+           allow-discrete + @starting-style keep the slide-in animation. */
+        display: none;
+        transition: transform var(--dur-mid) var(--ease-mech),
+                    display var(--dur-mid) var(--ease-mech) allow-discrete;
+    }
+
+    .nav__links.is-open {
+        display: block;
+        transform: translateX(0);
+    }
+
+    /* Entry state, so the panel slides in rather than appearing. */
+    @starting-style {
+        .nav__links.is-open { transform: translateX(100%); }
+    }
+
+    .nav__links ul {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--sp-1);
+    }
+
+    .nav__link {
+        padding: var(--sp-4);
+        font-size: var(--fs-md);
+        border-radius: var(--r-md);
+    }
+
+    .nav__link.is-active::after { left: var(--sp-4); right: auto; width: 1.5rem; }
+
+    .footer__lead { grid-template-columns: 1fr; gap: var(--sp-7); }
+    .footer__built { display: none; }
+}
+
+@media (max-width: 620px) {
+    .field-row { grid-template-columns: 1fr; }
+    .footer__cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-6); }
+    /* The email address must never force a horizontal scroll. */
+    .footer__mail { font-size: var(--fs-sm); }
+    .footer__mail-text { overflow-wrap: anywhere; }
+    .toast-stack { left: var(--sp-4); right: var(--sp-4); bottom: var(--sp-4); }
+    .toast { max-width: none; }
+    .nav__logo-dim { display: none; }
+}
+
+/* ==========================================================================
+   TOUCH TARGETS
+   Everything tappable gets at least a 44x44 hit area on a coarse pointer.
+   Achieved with sizing and pseudo-element expansion rather than larger
+   visuals, so the design is unchanged - only the region a thumb can hit.
+
+   Must stay last in this file: these rules share specificity with the
+   component definitions above and win on source order alone.
+   ========================================================================== */
+@media (pointer: coarse) {
+    .theme-toggle,
+    .menu-btn {
+        width: 2.75rem;
+        height: 2.75rem;
+    }
+
+    .footer__col a,
+    .footer__static,
+    .contact__v,
+    .footer__top,
+    .footer__mail,
+    .scroll-cue,
+    .nav__logo {
+        position: relative;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    /* Widens the hit box beyond the glyphs without shifting the text. */
+    .footer__col a::after,
+    .contact__v::after,
+    .contact__social a::after {
+        content: '';
+        position: absolute;
+        inset: -0.5rem -0.75rem;
+    }
+
+    .contact__social a { position: relative; }
+    .footer__col li + li { margin-top: 0; }
+}

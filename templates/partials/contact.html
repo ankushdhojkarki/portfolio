@@ -1,0 +1,69 @@
+<section id="contact" class="contact" data-section="06">
+    <div class="section__head">
+        <p class="mono section__label" data-reveal><span class="section__num">06</span> Contact</p>
+        <h2 class="section__title" data-split-words>Let's build something together.</h2>
+        <p class="section__sub" data-reveal>
+            Open to collaboration, junior roles, and interesting problems. Messages reach me directly.
+        </p>
+    </div>
+
+    <div class="contact__grid">
+        <form class="form" id="contactForm" novalidate data-reveal>
+            <div class="field-row">
+                <div class="field-group">
+                    <input type="text" id="name" name="name" placeholder=" " required
+                           autocomplete="name" maxlength="100"
+                           aria-describedby="name-error">
+                    <label for="name">Name</label>
+                    <p class="field-error mono" id="name-error" hidden></p>
+                </div>
+
+                <div class="field-group">
+                    <input type="email" id="email" name="email" placeholder=" " required
+                           autocomplete="email" maxlength="200"
+                           aria-describedby="email-error">
+                    <label for="email">Email</label>
+                    <p class="field-error mono" id="email-error" hidden></p>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <textarea id="message" name="message" placeholder=" " rows="6" required
+                          maxlength="4000" aria-describedby="message-error"></textarea>
+                <label for="message">Message</label>
+                <p class="field-error mono" id="message-error" hidden></p>
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--submit" id="submitBtn">
+                <span class="btn__label">Send message</span>
+                <span class="btn__spinner" aria-hidden="true"></span>
+                <svg viewBox="0 0 24 24" aria-hidden="true" class="btn__icon"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+        </form>
+
+        <aside class="contact__aside" data-reveal-stagger>
+            <div class="contact__item">
+                <p class="mono contact__k">Email</p>
+                <a href="mailto:ankushdhojkarki@gmail.com" class="contact__v">ankushdhojkarki@gmail.com</a>
+            </div>
+            <div class="contact__item">
+                <p class="mono contact__k">Location</p>
+                <p class="contact__v">Kathmandu, Nepal &middot; <span class="mono" data-clock>—</span></p>
+            </div>
+            <div class="contact__item">
+                <p class="mono contact__k">Elsewhere</p>
+                <div class="contact__social">
+                    <a href="https://github.com/ankushdhojkarki" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-github"/></svg>
+                    </a>
+                    <a href="https://www.linkedin.com/in/ankush-dhoj-karki-59b0742ab/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-linkedin"/></svg>
+                    </a>
+                    <a href="https://www.instagram.com/ankuskarki/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-instagram"/></svg>
+                    </a>
+                </div>
+            </div>
+        </aside>
+    </div>
+</section>

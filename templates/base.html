@@ -1,0 +1,87 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    {# ---------- Identity & SEO ---------- #}
+    <title>{% block title %}Ankush Dhoj Karki — Django Developer{% endblock %}</title>
+    <meta name="description" content="{% block description %}Django developer building scalable web systems and clean API architectures. Python, PostgreSQL, DRF — with a system administration background.{% endblock %}">
+    <meta name="author" content="Ankush Dhoj Karki">
+    <link rel="canonical" href="{% block canonical %}https://ankushdhojkarki-portfolio.vercel.app/{% endblock %}">
+    <meta name="robots" content="index, follow">
+
+    {# ---------- Social cards ---------- #}
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Ankush Dhoj Karki">
+    <meta property="og:title" content="{% block og_title %}Ankush Dhoj Karki — Django Developer{% endblock %}">
+    <meta property="og:description" content="Django developer building scalable web systems and clean API architectures.">
+    <meta property="og:url" content="https://ankushdhojkarki-portfolio.vercel.app/">
+    <meta property="og:image" content="https://ankushdhojkarki-portfolio.vercel.app{% static 'images/og-image.png' %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Ankush Dhoj Karki — Django Developer">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ankush Dhoj Karki — Django Developer">
+    <meta name="twitter:description" content="Django developer building scalable web systems and clean API architectures.">
+    <meta name="twitter:image" content="https://ankushdhojkarki-portfolio.vercel.app{% static 'images/og-image.png' %}">
+
+    {# ---------- Icons ---------- #}
+    <link rel="icon" href="{% static 'images/favicon.svg' %}" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
+    <meta name="theme-color" content="#0b0b0c" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#faf9f7" media="(prefers-color-scheme: light)">
+
+    {# ---------- Theme resolution before first paint (prevents flash) ---------- #}
+    <script>
+        (function () {
+            var root = document.documentElement;
+            // Marks that scripting is available, so CSS can show JS-driven
+            // chrome (the preloader) only when something will dismiss it.
+            root.classList.add('js');
+            try {
+                var stored = localStorage.getItem('theme');
+                var system = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+                root.setAttribute('data-theme', stored || system);
+            } catch (e) { /* private mode - keep the dark default */ }
+        })();
+    </script>
+
+    {# ---------- Critical asset hints ---------- #}
+    <link rel="preload" href="{% static 'fonts/instrument-sans-latin.woff2' %}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{% static 'fonts/jetbrains-mono-latin.woff2' %}" as="font" type="font/woff2" crossorigin>
+
+    <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/tokens.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sections.css' %}">
+    <link rel="stylesheet" href="{% static 'css/motion.css' %}">
+
+    {% block head_extra %}{% endblock %}
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    {% include 'partials/preloader.html' %}
+    {% include 'partials/nav.html' %}
+
+    {# Fixed decorative layers - engineered grid + ambient light #}
+    <div class="backdrop" aria-hidden="true">
+        <div class="backdrop__grid"></div>
+        <div class="backdrop__glow"></div>
+        <div class="backdrop__noise"></div>
+    </div>
+
+    <main id="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% include 'partials/footer.html' %}
+
+    {# Live region for form results and theme announcements #}
+    <div class="toast-stack" id="toastStack" role="status" aria-live="polite" aria-atomic="false"></div>
+
+    <script type="module" src="{% static 'js/main.js' %}"></script>
+    {% block body_extra %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,241 @@
+/* ==========================================================================
+   MOTION
+   Every animated-in element must have a defined *resting* state that is
+   fully visible, so a JS failure or reduced-motion preference can never
+   leave content invisible. `.is-in` is added by js/modules/reveal.js.
+   ========================================================================== */
+
+/* ==========================================================================
+   PRELOADER
+   ========================================================================== */
+
+.preloader {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-preload);
+    display: grid;
+    place-items: center;
+    background: var(--bg);
+    transition: opacity var(--dur-slow) var(--ease-out),
+                visibility var(--dur-slow) linear;
+}
+
+.preloader.is-done {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.preloader__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-5);
+    width: min(22rem, 74vw);
+}
+
+.preloader__name { overflow: hidden; }
+
+.preloader__word {
+    display: flex;
+    gap: 0.06em;
+    font-size: var(--fs-xl);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+}
+
+.preloader__word i {
+    font-style: normal;
+    display: inline-block;
+    transform: translateY(105%);
+    animation: letterRise var(--dur-slow) var(--ease-mech) forwards;
+    animation-delay: calc(var(--n, 0) * 60ms);
+}
+.preloader__word i:nth-child(1) { --n: 0; }
+.preloader__word i:nth-child(2) { --n: 1; }
+.preloader__word i:nth-child(3) { --n: 2; }
+.preloader__word i:nth-child(4) { --n: 3; }
+.preloader__word i:nth-child(5) { --n: 4; }
+.preloader__word i:nth-child(6) { --n: 5; }
+
+@keyframes letterRise { to { transform: translateY(0); } }
+
+.preloader__meta {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    color: var(--text-faint);
+}
+
+.preloader__track {
+    width: 100%;
+    height: 1px;
+    background: var(--line);
+    overflow: hidden;
+}
+
+.preloader__fill {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: var(--accent-fill);
+    transition: width 200ms var(--ease-out);
+}
+
+/* The preloader is decorative; without JS nothing would dismiss it, so it
+   must never render at all. `.js` is set by the inline script in base.html. */
+html:not(.js) .preloader { display: none; }
+
+/* ==========================================================================
+   SPLIT TEXT — line masks (hero) and word masks (section titles)
+   ========================================================================== */
+
+/* Wrapper inserted by js/modules/split.js around each line/word. */
+.split {
+    display: inline-block;
+    transform: translateY(105%);
+    transition: transform var(--dur-slow) var(--ease-mech);
+    transition-delay: calc(var(--d, 0) * var(--stagger));
+}
+
+.split-mask {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    /* Descenders would be clipped by overflow:hidden without this. */
+    padding-bottom: 0.12em;
+    margin-bottom: -0.12em;
+}
+
+.is-in .split,
+.split.is-in { transform: translateY(0); }
+
+/* Resting state when split never runs (no JS / reduced motion). */
+[data-split]:not(.is-split),
+[data-split-words]:not(.is-split) { opacity: 1; }
+
+/* ==========================================================================
+   REVEAL
+   ========================================================================== */
+
+[data-reveal] {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity var(--dur-slow) var(--ease-out),
+                transform var(--dur-slow) var(--ease-out);
+}
+
+[data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+}
+
+[data-reveal-stagger] > * {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity var(--dur-mid) var(--ease-out),
+                transform var(--dur-mid) var(--ease-out);
+}
+
+[data-reveal-stagger].is-in > * {
+    opacity: 1;
+    transform: none;
+}
+
+[data-reveal-stagger].is-in > *:nth-child(1) { transition-delay: calc(0 * var(--stagger)); }
+[data-reveal-stagger].is-in > *:nth-child(2) { transition-delay: calc(1 * var(--stagger)); }
+[data-reveal-stagger].is-in > *:nth-child(3) { transition-delay: calc(2 * var(--stagger)); }
+[data-reveal-stagger].is-in > *:nth-child(4) { transition-delay: calc(3 * var(--stagger)); }
+[data-reveal-stagger].is-in > *:nth-child(5) { transition-delay: calc(4 * var(--stagger)); }
+[data-reveal-stagger].is-in > *:nth-child(n+6) { transition-delay: calc(5 * var(--stagger)); }
+
+/* Cards enter with a slight scale so the rail feels physical. */
+[data-rail-item] {
+    opacity: 0;
+    transform: translateY(28px) scale(0.985);
+    transition: opacity var(--dur-slow) var(--ease-out),
+                transform var(--dur-slow) var(--ease-out);
+    transition-delay: calc(var(--i, 0) * var(--stagger));
+}
+.is-in [data-rail-item],
+[data-rail-item].is-in { opacity: 1; transform: none; }
+
+[data-field-item] {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+    transition: opacity var(--dur-mid) var(--ease-out),
+                transform var(--dur-mid) var(--ease-mech);
+    transition-delay: calc(var(--i, 0) * 28ms);
+}
+.is-in [data-field-item] { opacity: 1; transform: translate3d(var(--dx, 0px), var(--dy, 0px), 0) scale(var(--s, 1)); }
+
+/* ==========================================================================
+   HERO HANDOFF
+   The preloader hands directly into the hero: nothing in the hero animates
+   until <body> is marked ready, so the two reads as one continuous move.
+   ========================================================================== */
+
+body:not(.is-ready) .hero [data-reveal],
+body:not(.is-ready) .hero [data-reveal-stagger] > * { transition-delay: 0ms; }
+
+body.is-ready .hero .split { transition-delay: calc(120ms + var(--d, 0) * var(--stagger)); }
+body.is-ready .hero__portrait .portrait__frame { animation: portraitIn var(--dur-xslow) var(--ease-mech) 80ms backwards; }
+
+@keyframes portraitIn {
+    from { clip-path: inset(0 0 100% 0); transform: translateY(2rem) scale(1.02); }
+    to   { clip-path: inset(0 0 0 0); }
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   Durations are already ~0 via tokens.css. Here we additionally remove
+   transforms, infinite loops, and scroll-linked displacement outright.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+
+    .split { transform: none !important; }
+    [data-reveal],
+    [data-reveal-stagger] > *,
+    [data-rail-item],
+    [data-field-item] {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .eyebrow__dot,
+    .pcard__status-dot,
+    .scroll-cue__dot,
+    .preloader__word i { animation: none !important; }
+
+    .preloader__word i { transform: none; }
+    .scroll-cue__dot { display: none; }
+
+    /* Kill scroll-linked displacement entirely. */
+    .portrait__frame { transform: none !important; }
+    .portrait img { transform: none !important; }
+    .backdrop__glow { display: none; }
+    .chip { transform: none !important; }
+
+    body.is-ready .hero__portrait .portrait__frame { animation: none; }
+}
+
+/* Users who opted out of the pinned rail via reduced motion get the grid. */
+@media (prefers-reduced-motion: reduce) {
+    .rail .rail__stage {
+        position: static;
+        display: block;
+        min-height: 0;
+        overflow: visible;
+    }
+    .rail .rail__track {
+        transform: none;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(20rem, 100%), 1fr));
+        max-width: var(--maxw);
+        margin-inline: auto;
+    }
+    .rail .pcard { width: auto; }
+    .rail__hud { display: none; }
+}
