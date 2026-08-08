@@ -133,6 +133,33 @@ def main():
         check("body scroll locked", locked)
         check("focus moves into sheet", focus_in)
 
+        # The sheet is position:fixed inside <header>. Any backdrop-filter or
+        # transform on the header makes it the containing block, which
+        # collapses the panel to header height and hides most of the links.
+        panel_box = p2.evaluate("""() => {
+            const b = document.getElementById('navLinks').getBoundingClientRect();
+            return {h: Math.round(b.height), vh: window.innerHeight};
+        }""")
+        check("sheet fills viewport", panel_box["h"] >= panel_box["vh"] - 2,
+              f"{panel_box['h']}px of {panel_box['vh']}px")
+
+        all_visible = p2.evaluate("""() => {
+            const items = [...document.querySelectorAll('#navLinks li')];
+            return items.length > 0 && items.every(li => {
+                const r = li.getBoundingClientRect();
+                return r.top >= 0 && r.bottom <= window.innerHeight;
+            });
+        }""")
+        check("all menu items on screen", all_visible)
+
+        # The panel shares a z-index with the bar, so it can paint over the
+        # close button and strand the visitor inside the menu.
+        check("close button is tappable", p2.evaluate("""() => {
+            const btn = document.getElementById('menuBtn');
+            const b = btn.getBoundingClientRect();
+            return btn.contains(document.elementFromPoint(b.left + b.width / 2, b.top + b.height / 2));
+        }"""))
+
         # Tab past the end should wrap back inside the sheet
         for _ in range(10):
             p2.keyboard.press("Tab")

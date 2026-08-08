@@ -141,6 +141,19 @@
 }
 
 /* ==========================================================================
+   SMALL SCREENS
+   The mono label size is fixed rather than fluid, and 11px with wide
+   tracking is uncomfortably small on a phone. Nudge it up, and tighten the
+   tracking so the longer labels still fit on one line.
+   ========================================================================== */
+@media (max-width: 620px) {
+    :root {
+        --fs-mono: 0.75rem;
+        --tracking-wide: 0.12em;
+    }
+}
+
+/* ==========================================================================
    REDUCED MOTION
    Collapses every duration to near-zero. Elements that animate *in* are
    given their final state directly in motion.css, never left invisible.

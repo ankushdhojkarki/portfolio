@@ -571,7 +571,10 @@ a.contact__v:hover { color: var(--accent-ink); }
 
 @media (max-width: 1040px) {
     .hero__grid { grid-template-columns: 1fr; gap: var(--sp-7); }
-    .hero__portrait { justify-content: flex-start; order: -1; }
+    /* Text before portrait: leading a phone screen with a tall photo pushes
+       the name and role below the fold. DOM order already reads
+       lead -> portrait, so no `order` override is needed here. */
+    .hero__portrait { justify-content: flex-start; }
     .portrait { width: min(62vw, 340px); }
     .about__body { grid-template-columns: 1fr; }
     .blog__grid,
@@ -583,5 +586,8 @@ a.contact__v:hover { color: var(--accent-ink); }
     .hero__foot { flex-direction: column; align-items: flex-start; gap: var(--sp-5); }
     .hero__stats { text-align: left; width: 100%; justify-content: space-between; }
     .portrait { width: min(78vw, 320px); }
+    /* Both caption halves are wide-tracked mono; on a narrow screen they
+       collide, so let them stack instead of overlapping. */
+    .portrait__caption { flex-wrap: wrap; row-gap: var(--sp-1); }
     .footer__row { flex-direction: column; align-items: flex-start; }
 }
