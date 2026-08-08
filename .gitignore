@@ -236,3 +236,6 @@ desktop.ini
 __pycache__/
 *.pyc
 .vercel
+
+# Local editor/agent settings - machine-specific, not part of the project
+.claude/
