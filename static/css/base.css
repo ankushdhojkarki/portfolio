@@ -109,6 +109,13 @@ strong { font-weight: 650; color: var(--text); }
     white-space: nowrap;
 }
 
+/* Copy that only makes sense with a mouse (e.g. "move your cursor"). */
+.hover-only { display: none; }
+@media (hover: hover) and (pointer: fine) {
+    .hover-only { display: inline; }
+}
+
+
 /* ==========================================================================
    BACKDROP — fixed engineered grid + ambient glow + film grain
    ========================================================================== */
@@ -234,13 +241,25 @@ section {
     position: fixed;
     inset: 0 0 auto 0;
     z-index: var(--z-nav);
-    background: color-mix(in srgb, var(--bg) 72%, transparent);
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
     border-bottom: 1px solid transparent;
     transition: transform var(--dur-mid) var(--ease-out),
                 border-color var(--dur-mid) var(--ease-out),
                 background-color var(--dur-mid) var(--ease-out);
+}
+
+/* The blur lives on a pseudo-element, not on .nav itself. backdrop-filter
+   makes an element the containing block for its position: fixed
+   descendants, which trapped the mobile sheet inside the header instead of
+   letting it fill the viewport. A pseudo-element has no such effect. */
+.nav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: color-mix(in srgb, var(--bg) 72%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    transition: background-color var(--dur-mid) var(--ease-out);
 }
 
 .nav.is-scrolled { border-bottom-color: var(--line); }
@@ -325,7 +344,15 @@ section {
 
 @keyframes drawIn { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
-.nav__actions { display: flex; align-items: center; gap: var(--sp-2); }
+/* Sits above the mobile sheet, which is fixed at the same z-index and
+   would otherwise paint over the close button. */
+.nav__actions {
+    position: relative;
+    z-index: calc(var(--z-nav) + 1);
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+}
 
 .nav__progress {
     position: absolute;
@@ -807,4 +834,46 @@ section {
     .toast-stack { left: var(--sp-4); right: var(--sp-4); bottom: var(--sp-4); }
     .toast { max-width: none; }
     .nav__logo-dim { display: none; }
+}
+
+/* ==========================================================================
+   TOUCH TARGETS
+   Everything tappable gets at least a 44x44 hit area on a coarse pointer.
+   Achieved with sizing and pseudo-element expansion rather than larger
+   visuals, so the design is unchanged - only the region a thumb can hit.
+
+   Must stay last in this file: these rules share specificity with the
+   component definitions above and win on source order alone.
+   ========================================================================== */
+@media (pointer: coarse) {
+    .theme-toggle,
+    .menu-btn {
+        width: 2.75rem;
+        height: 2.75rem;
+    }
+
+    .footer__col a,
+    .footer__static,
+    .contact__v,
+    .footer__top,
+    .footer__mail,
+    .scroll-cue,
+    .nav__logo {
+        position: relative;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    /* Widens the hit box beyond the glyphs without shifting the text. */
+    .footer__col a::after,
+    .contact__v::after,
+    .contact__social a::after {
+        content: '';
+        position: absolute;
+        inset: -0.5rem -0.75rem;
+    }
+
+    .contact__social a { position: relative; }
+    .footer__col li + li { margin-top: 0; }
 }

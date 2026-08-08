@@ -81,7 +81,12 @@ function initMobileSheet() {
         btn.setAttribute('aria-expanded', 'true');
         btn.setAttribute('aria-label', 'Close menu');
         document.body.classList.add('is-locked');
-        if (nav) nav.dataset.locked = 'true';
+        if (nav) {
+            nav.dataset.locked = 'true';
+            // A transform on the header would also make it the containing
+            // block for the fixed sheet, so the bar must be untucked.
+            nav.classList.remove('is-tucked');
+        }
         if (scrim) {
             scrim.hidden = false;
             requestAnimationFrame(() => scrim.classList.add('is-visible'));
