@@ -36,6 +36,15 @@ def main():
         page.goto(URL, wait_until="load")
         page.wait_for_function("document.body.classList.contains('is-ready')", timeout=15000)
 
+        # Dark must win on first visit even when the OS asks for light.
+        light_ctx = browser.new_context(viewport={"width": 1440, "height": 900}, color_scheme="light")
+        lp = light_ctx.new_page()
+        lp.goto(URL, wait_until="load")
+        lp.wait_for_function("document.body.classList.contains('is-ready')", timeout=15000)
+        check("dark default despite OS light", lp.get_attribute("html", "data-theme") == "dark",
+              f"data-theme={lp.get_attribute('html', 'data-theme')}")
+        light_ctx.close()
+
         # Theme toggle
         before = page.get_attribute("html", "data-theme")
         page.click("#themeToggle")
