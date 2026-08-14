@@ -102,9 +102,21 @@ html:not(.js) .preloader { display: none; }
     display: inline-block;
     overflow: hidden;
     vertical-align: bottom;
-    /* Descenders would be clipped by overflow:hidden without this. */
+    /* The mask has to clip vertically for the slide-up, but its overflow
+       also cuts any ink that sits outside the text's advance box. Each
+       padding below opens room for that ink; the matching negative margin
+       cancels the padding so layout position is unchanged.
+
+       - bottom: descenders (g, j, y)
+       - right:  italic lean past the advance width (measured ~0.09em on
+                 the accent line, which shaved the final "s")
+       - left:   the same lean at the start of a line */
     padding-bottom: 0.12em;
     margin-bottom: -0.12em;
+    padding-right: 0.16em;
+    margin-right: -0.16em;
+    padding-left: 0.08em;
+    margin-left: -0.08em;
 }
 
 .is-in .split,
